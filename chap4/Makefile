@@ -3,7 +3,8 @@ cflags:=-Wall -Werror -lapue -O
 
 SRCS:=myfile.c access_test.c umask.c chmod.c mychgrp.c blk.c \
 		myrename.c mkrmdir.c myln.c myreadlink.c myslnk.c \
-		truc.c mydir.c myftw.c cd-cwd.c devrdev.c
+		truc.c mydir.c myftw.c cd-cwd.c devrdev.c myhandle_cp.c \
+		mystat.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
