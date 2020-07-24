@@ -86,7 +86,7 @@ static int dopath(Myfunc* func) {
 			strcmp(dirp->d_name, "..") == 0)
 			continue;
 		strcpy(&fullpath[n], dirp->d_name);					//将当前目录下的文件或者目录名字拼接到原来路径的后面,递归回来之后n是不变的，可以复用
-		printf("%s\n", fullpath);
+		//printf("%s\n", fullpath);
 		if ((ret = dopath(func)) != 0)
 			break;
 	}
