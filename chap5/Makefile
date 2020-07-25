@@ -1,7 +1,8 @@
 CC:=gcc
 cflags:=-Wall -Werror -lapue -O
 
-SRCS:=getputc.c fgetputs.c fgetputc.c readwrite.c
+SRCS:=getputc.c fgetputs.c fgetputc.c readwrite.c freopen.c \
+		stream_buf.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
