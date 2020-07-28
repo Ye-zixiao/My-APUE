@@ -2,7 +2,8 @@ CC:=gcc
 cflags:=-Wall -Werror -lapue -O
 
 SRCS:=getputc.c fgetputs.c fgetputc.c readwrite.c freopen.c \
-		stream_buf.c
+		stream_buf.c buf.c tmpnam.c mkstemp.c fmemopen.c SetBuf.c \
+
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
