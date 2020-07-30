@@ -13,9 +13,9 @@ int main(void)
 	time(&nowtime);
 	if ((ptm = localtime(&nowtime)) == NULL)
 		err_sys("localtime error\n");
-	if (strftime(buf, 64, "%c %Z", ptm) == 0)
+	if (strftime(buf, 64, "%c %Z\n", ptm) == 0)
 		err_sys("strftime error\n");
-	printf("%s\n", buf);
+	fputs(buf,stdout);
 
 	/*if (strptime(buf, "%c %Z", ptm) == NULL)
 		err_sys("strptime error\n");

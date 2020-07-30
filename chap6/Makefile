@@ -2,8 +2,7 @@ CC:=gcc
 cflags:=-Wall -Werror -lapue -O
 
 SRCS:=userinfo.c groupinfo.c sgroup.c mydate.c myhostname.c \
-		strftime.c
-#	shadowinfo.c
+		strftime.c ctime.c myuname.c shadowlook.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
