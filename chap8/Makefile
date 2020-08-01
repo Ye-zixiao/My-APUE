@@ -1,8 +1,9 @@
 CC:=gcc
-cflags:=-Wall -Werror -lapue -O
+cflags:=-Wall -lapue -O #-Werror
 
 SRCS:=mypid.c fork.c vfork.c zombie.c with_cond.c race_cond.c \
-		init_is_myparent.c mytime.c
+		init_is_myparent.c mytime.c noreturn.c resugid.c setreuid.c \
+		setuid.c tell.c doanother.c testinterp.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
