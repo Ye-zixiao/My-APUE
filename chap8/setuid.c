@@ -1,4 +1,5 @@
-﻿#include"MyAPUE.h"
+﻿#define _RESUID
+#include"MyAPUE.h"
 
 int main(void)
 {

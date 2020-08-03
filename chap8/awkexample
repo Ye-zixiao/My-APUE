@@ -1,0 +1,7 @@
+#!/usr/bin/awk -f
+#建议使用l目录中tellexample解释器文件来做实验，不用涉及awk的链接问题
+BEGIN {
+	for(i =0; i<ARGC;i++)
+		printf "ARGV[%d] = %s\n", i, ARGV[i]
+	exit	
+}

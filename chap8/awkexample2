@@ -1,0 +1,7 @@
+awk 'BEGIN{
+	for (i =0; i< ARGC; i++)
+		printf "ARGV[%d] = %s\n",i,ARGV[i]
+	exit
+}' $*
+
+#需要有bash这样的传统shell来执行
