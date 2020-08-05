@@ -1,7 +1,7 @@
 CC:=gcc
 cflags:=-Wall -lapue -O #-Werror
 
-SRCS:=
+SRCS:=getpgid.c setpgid.c orphan.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
