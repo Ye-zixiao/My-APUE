@@ -9,8 +9,9 @@ int main(void)
 	else if (pid == 0) {
 		/*if (execl("/home/yexinhai/my-apue/chap8/tell",		//1、若pathname为二进制可执行文件
 				"arg1", "arg2", "arg3", (char*)0) == -1)*/
-		if (execl("/home/yexinhai/my-apue/chap8/testinterp.sh",	//2、若pathname为解释器文件
-			"arg1", "arg2", "arg3", (char*)0) == -1)
+		//if (execl("/home/yexinhai/my-apue/chap8/testinterp.sh",	//2、若pathname为解释器文件
+		//	"arg1", "arg2", "arg3", (char*)0) == -1)
+		if(execlp("testinterp.sh","argv1","argv2","argv3",(char*)0)==-1)
 			err_sys("execl error\n");
 	}
 	else {

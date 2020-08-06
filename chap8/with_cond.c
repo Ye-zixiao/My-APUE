@@ -1,4 +1,5 @@
 ﻿#include"apue.h"
+#include<sys/wait.h>
 
 static void charactatime(const char* pstr) {
 	int ch;
@@ -15,14 +16,16 @@ int main(void)
 	if ((pid = fork()) < 0)
 		err_sys("fork error\n");
 	else if (pid == 0) {
-		//WAIT_PARENT();
+		WAIT_PARENT();
 		charactatime("output from child process\n");
-		TELL_PARENT(getppid());
+		//TELL_PARENT(getppid());
 	}
 	else{
-		WAIT_CHILD();
+		//WAIT_CHILD();
 		charactatime("output from parent process\n");
-		//TELL_CHILD(pid);//父进程先行
+		TELL_CHILD(pid);//父进程先行
+		if(wait(NULL)!=pid)
+			err_sys("wait error\n");
 	}
 
 	exit(0);
