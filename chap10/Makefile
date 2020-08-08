@@ -1,7 +1,7 @@
 CC:=gcc
 cflags:=-Wall -lapue -O #-Werror
 
-SRCS:=
+SRCS:=signal_handler.c unreentrant.c sig_cld.c mySleep.c kill.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
