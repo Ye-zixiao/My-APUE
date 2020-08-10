@@ -28,10 +28,13 @@ void print_now(void) {
 	printf("now time is %s\n", buf);
 }
 
-int main(void)
+int main(int argc,char*argv[])
 {
+	if(argc!=2)
+		err_sys("usage:sleep <seconds>\n");
+
 	print_now();
-	mySleep(5);
+	mySleep(atoi(argv[1]));
 	print_now();
 	return 0;
 }

@@ -11,6 +11,7 @@
 #include<unistd.h>
 #include<stdio.h>
 #include<stdlib.h>
+#include<signal.h>
 #include<errno.h>
 #include<sys/wait.h>
 
@@ -35,7 +36,7 @@ void pr_exit(int status) {
 		printf("abnormal termination, signal number = %d%s\n",
 			WTERMSIG(status),
 #ifdef WCOREDUMP
-			WCOREDUMP(status) ? " core file generated" : "");
+			WCOREDUMP(status) ? " core file generated)" : "");
 #else
 		"");
 #endif
@@ -87,5 +88,47 @@ int System(const char* cmdstring) {
 3、正常返回那么就是shell的退出状态
 */
 
+
+//void print_now(void) {//打印当前时间
+//	const int BufSize = 64;
+//	struct timeval timevalbuf;
+//	struct tm* ptm;
+//	char buf[BufSize];
+//
+//	gettimeofday(&timevalbuf, NULL);
+//	if ((ptm = localtime(&timevalbuf.tv_sec)) == NULL)
+//		err_sys("localtime error\n");
+//	if (strftime(buf, BufSize, "%Y-%m-%d %H:%M:%S", ptm) == 0)
+//		err_sys("strftime error\n");
+//	printf("now time is %s\n", buf);
+//}
+//
+//static void sig_alrm(int sig) {
+//	longjmp(env_alrm, 1);
+//}
+
+void pr_mask(const char* str) {
+	sigset_t sigset;
+	int saved_errno;
+
+	saved_errno = errno;
+	if (sigprocmask(0, NULL, &sigset) == -1)
+		err_sys("sigprocmask error\n");
+	else {
+		printf("%s", str);
+		if (sigismember(&sigset, SIGINT))
+			printf(" SIGINT");
+		if (sigismember(&sigset, SIGQUIT))
+			printf(" SIGQUIT");
+		if (sigismember(&sigset, SIGUSR1))
+			printf(" SIGUSR1");
+		if (sigismember(&sigset, SIGUSR2))
+			printf(" SIGUSR2");
+		if (sigismember(&sigset, SIGALRM))
+			printf(" SIGALRM");
+		printf("\n");
+	}
+	errno = saved_errno;
+}
 
 #endif
