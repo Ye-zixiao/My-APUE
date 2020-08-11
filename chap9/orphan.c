@@ -7,8 +7,9 @@ static void sig_hup(int signo) {
 
 static void pr_ids(char* name) {
 	//		进程名  进程id  父进程id  进程组id  所属会话id  前台进程组id
-	printf("%-6s: pid= %4d, ppid= %4d, pgid= %4d, sid= %d, tpgid= %d\n",
-		name, getpid(), getppid(), getpgrp(), getsid(getpid()), tcgetpgrp(STDOUT_FILENO));
+	printf("%-6s: pid= %4d, ppid= %4d, pgid= %4d, sid= %d, tpgid= %d, tcgetsid = %d\n",
+		name, getpid(), getppid(), getpgrp(), getsid(getpid()), tcgetpgrp(STDOUT_FILENO),
+		tcgetsid(STDOUT_FILENO));
 	fflush(stdout);
 }
 

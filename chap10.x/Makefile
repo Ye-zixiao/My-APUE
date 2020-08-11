@@ -1,9 +1,8 @@
 CC:=gcc
-cflags:=-Wall -lapue -O #-Werror
+cflags:=-Wall -lapue -Wl,-rpath,../include -L../include -lmyapue \
+		-O #-Werror
 
-SRCS:=signal_handler.c unreentrant.c sig_cld.c mySleep.c kill.c \
-		mySleep2.c Sigset_t.c pr_mask.c sigpending.c Signal.c \
-		Signal_intr.c sigjmp.c abort.c
+SRCS:=tellwait.c abort.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
