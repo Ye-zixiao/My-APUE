@@ -1,4 +1,4 @@
-#include"MyAPUE.h"
+#include"../include/MyAPUE.h"
 
 void err_sys(const char* msg) {
 	fputs(msg, stderr);

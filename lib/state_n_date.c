@@ -1,4 +1,4 @@
-#include"MyAPUE.h"
+#include"../include/MyAPUE.h"
 //#define _RESUID
 
 void pr_exit(int status) {
@@ -9,7 +9,7 @@ void pr_exit(int status) {
 		printf("abnormal termination, signal number = %d%s\n",
 			WTERMSIG(status),
 #ifdef WCOREDUMP
-			WCOREDUMP(status) ? " core file generated)" : "");
+			WCOREDUMP(status) ? " (core file generated)" : "");
 #else
 		"");
 #endif
@@ -66,5 +66,5 @@ void pr_now(void) {//打印当前时间
 		err_sys("localtime error\n");
 	if (strftime(buf, BufSize, "%Y-%m-%d %H:%M:%S", ptm) == 0)
 		err_sys("strftime error\n");
-	printf("now time is %s\n", buf);
+	printf("Current time is %s\n", buf);
 }

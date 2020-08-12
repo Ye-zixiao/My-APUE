@@ -1,4 +1,4 @@
-﻿#include"MyAPUE.h"
+﻿#include"../include/MyAPUE.h"
 
 static void abrt_sig(int sig) {
 	if (sig == SIGABRT)
