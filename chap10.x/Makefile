@@ -4,7 +4,7 @@ cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue \
 #-WL,-rpath,../lib -L../lib -lmyapue 的意思是到相对路径../lib中找动态链接库
 
 SRCS:=tellwait.c abort.c good_system.c whySystem.c Sleep.c \
-		hrsleep.c
+		hrsleep.c jobctrl.c strsignal.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 

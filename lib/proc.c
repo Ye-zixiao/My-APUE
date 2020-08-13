@@ -1,5 +1,6 @@
 ﻿#include"../include/MyAPUE.h"
 
+
 int System(const char* cmdstring) {
 	if (cmdstring == NULL)
 		return 1;
@@ -134,6 +135,7 @@ void Abort(void) {
 	kill(getpid(), SIGABRT);
 	exit(EXIT_FAILURE);
 }
+
 
 static void sig_alrm(int signo) {
 	//...nothing to do
