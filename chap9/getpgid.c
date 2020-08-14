@@ -1,4 +1,4 @@
-﻿#include"MyAPUE.h"
+﻿#include"../include/MyAPUE.h"
 #include<termio.h>
 
 int main(void) {

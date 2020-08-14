@@ -24,9 +24,11 @@
 * -------------------------------------------------------------
 */
 
-//状态与信息
+//错误例程
 extern void err_sys(const char* msg);
+extern void err_exit(int err, const char* msg);
 
+//状态与信息
 extern void pr_mask(const char* str);
 extern void pr_exit(int status);
 extern void pr_resuid(void);

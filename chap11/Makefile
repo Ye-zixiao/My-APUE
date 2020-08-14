@@ -1,9 +1,9 @@
 CC:=gcc
-cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue \
-		-O #-Werror
+cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
+		-O  #-Werror
 #-WL,-rpath,../lib -L../lib -lmyapue 的意思是到相对路径../lib中找动态链接库
 
-SRCS:=getpgid.c orphan.c setpgid.c tcgetsid.c
+SRCS:=thread_id.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
@@ -15,7 +15,6 @@ ${PROGS}:%:%.o Makefile
 
 clean:
 	rm -f ${PROGS} ${OBJS}
-	rm -f outfile
 
 rmprg:
 	rm -f ${PROGS}
