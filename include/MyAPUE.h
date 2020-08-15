@@ -42,9 +42,11 @@ extern void WAIT_PARENT(void);
 extern void WAIT_CHILD(void);
 
 //特殊系统函数
+typedef void Sigfunc(int);
 extern int System(const char* cmdstring);
 extern int mysystem(const char* cmdstring);
 extern void Abort(void);
 extern unsigned int Sleep(unsigned int seconds);
+extern Sigfunc* mysignal(int signo, Sigfunc*sighandler);
 
 #endif

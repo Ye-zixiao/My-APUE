@@ -136,10 +136,10 @@ void Abort(void) {
 	exit(EXIT_FAILURE);
 }
 
-
 static void sig_alrm(int signo) {
 	//...nothing to do
 }
+
 
 unsigned int Sleep(unsigned int seconds) {
 	struct sigaction newact, oldact;
@@ -175,4 +175,32 @@ unsigned int Sleep(unsigned int seconds) {
 	sigaction(SIGALRM, &oldact, NULL);
 	sigprocmask(SIG_SETMASK, &oldmask, NULL);
 	return unslept;
+}
+
+
+Sigfunc* mysignal(int signo, Sigfunc* sighandler) {
+	struct sigaction act, oact;
+
+	/*
+		初始化工作sigaction结构体
+	*/
+	act.sa_handler = sighandler;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = 0;
+	if (signo == SIGALRM)
+#ifdef SA_INTERRUPT
+		/*若针对的信号是SIGALRM就不设置系统调用中断时重启，
+			因为SIGALRM又是要被用于对I/O操作进行时间限制*/
+		act.sa_flags |= SA_INTERRUPT;
+#endif
+	else
+		//一般情况下则对中断的系统调用进行自动重启动
+		act.sa_flags |= SA_RESTART;
+
+	/*
+		调用sigaction完成真正的信号处理函数注册工作
+	*/
+	if (sigaction(signo, &act, &oact) == -1)
+		return SIG_ERR;
+	return oact.sa_handler;
 }
