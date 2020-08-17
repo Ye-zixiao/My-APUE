@@ -1,7 +1,7 @@
 CC=gcc
 cflags=-fPIC
 
-SRCS:=myerror.c proc.c state_n_date.c waittell.c
+SRCS:=myerror.c proc.c state_n_date.c waittell.c Pthread.c
 OBJS:=${SRCS:c=o}
 
 all:${OBJS}

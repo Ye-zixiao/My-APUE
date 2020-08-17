@@ -15,6 +15,7 @@
 #include<time.h>
 #include<sys/wait.h>
 #include<sys/time.h>
+#include<pthread.h>
 
 #define BUFSIZE 4096
 
@@ -48,5 +49,10 @@ extern int mysystem(const char* cmdstring);
 extern void Abort(void);
 extern unsigned int Sleep(unsigned int seconds);
 extern Sigfunc* mysignal(int signo, Sigfunc*sighandler);
+
+//自定义线程函数
+extern void Pthread_create(pthread_t* tid,
+	const pthread_attr_t* attr, void* (*thread_func)(void*), void* args);
+extern void Pthread_join(pthread_t tid, void** rval_ptr);
 
 #endif
