@@ -5,7 +5,7 @@ cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
 
 SRCS:=thread_id.c pthread_exit.c thread_errno.c max.c thread_localreturn.c \
 		pthread_cancel.c pthread_cleanup.c mutex_struct.c mutex_trylock.c \
-		foo1.c foo2.c foo3.c
+		foo1.c foo2.c foo3.c mutex_timelock.c rwjobqueue.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
