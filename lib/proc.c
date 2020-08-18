@@ -141,6 +141,9 @@ static void sig_alrm(int signo) {
 }
 
 
+/*
+	实际测试过程中该函数好像会在多线程进程中会使得整个进程进入休眠状态，而不是线程
+*/
 unsigned int Sleep(unsigned int seconds) {
 	struct sigaction newact, oldact;
 	sigset_t newmask, oldmask, suspend_mask;
