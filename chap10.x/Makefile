@@ -16,7 +16,6 @@ ${PROGS}:%:%.o Makefile
 
 clean:
 	rm -f ${PROGS} ${OBJS}
-	rm -f outfile
 
 rmprg:
 	rm -f ${PROGS}

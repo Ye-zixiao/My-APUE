@@ -38,7 +38,7 @@ void pr_mask(const char* str) {
 	if (sigprocmask(0, NULL, &sigset) == -1)
 		err_sys("sigprocmask error\n");
 	else {
-		printf("%s", str);
+		printf("%s ", str);
 		if (sigismember(&sigset, SIGINT))
 			printf(" SIGINT");
 		if (sigismember(&sigset, SIGQUIT))
@@ -67,4 +67,14 @@ void pr_now(void) {//打印当前时间
 	if (strftime(buf, BufSize, "%Y-%m-%d %H:%M:%S", ptm) == 0)
 		err_sys("strftime error\n");
 	printf("Current time is %s\n", buf);
+}
+
+
+/*
+	用来帮助pthread_cond_timewait这样的函数生成绝对的定时时间
+*/
+void get_abstime(struct timespec* tsp, long seconds) {
+	if (clock_gettime(CLOCK_REALTIME, tsp) != 0)
+		err_sys("clock_gettime error\n");
+	tsp->tv_sec += seconds;
 }

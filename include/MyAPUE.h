@@ -34,6 +34,7 @@ extern void pr_mask(const char* str);
 extern void pr_exit(int status);
 extern void pr_resuid(void);
 extern void pr_now(void);
+extern void get_abstime(struct timespec* tsp, long seconds);
 
 //信号传递
 extern void TELL_WAIT(void);
