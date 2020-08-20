@@ -56,4 +56,7 @@ extern void Pthread_create(pthread_t* tid,
 	const pthread_attr_t* attr, void* (*thread_func)(void*), void* args);
 extern void Pthread_join(pthread_t tid, void** rval_ptr);
 
+//算法例程
+extern void heap_sort(int arr[], int n, int(*pf)(const int*, const int*));
+
 #endif
