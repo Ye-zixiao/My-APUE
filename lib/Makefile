@@ -1,5 +1,5 @@
 CC=gcc
-cflags=-fPIC
+cflags=-fPIC -lpthread
 
 SRCS:=myerror.c proc.c state_n_date.c waittell.c Pthread.c \
 		algorithm.c

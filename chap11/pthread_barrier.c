@@ -94,5 +94,7 @@ int main(void)
 		printf("%d\n", tar_arr[i]);
 	printf("sort took %.4f seconds\n", (double)nas / 1000000000.0);
 
+	free(src_arr);
+	free(tar_arr);
 	exit(0);
 }

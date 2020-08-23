@@ -12,12 +12,13 @@
 #include<stdlib.h>
 #include<signal.h>
 #include<errno.h>
-#include<time.h>
 #include<sys/wait.h>
 #include<sys/time.h>
+#include<time.h>
 #include<pthread.h>
 
 #define BUFSIZE 4096
+#define SBUFSIZE 64
 
 /*
 * -------------------------------------------------------------
