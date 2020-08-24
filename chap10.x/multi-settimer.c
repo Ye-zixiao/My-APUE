@@ -183,8 +183,7 @@ void settimer(unsigned second, void(*pf)(void)) {
 			alarm(remainsec);
 			insert(second - remainsec, pf);
 		}
-	}
-}
+	} }
 
 
 /*
