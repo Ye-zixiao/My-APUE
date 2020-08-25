@@ -1,5 +1,7 @@
 ﻿/*
 	多定时器功能：允许定时多个闹钟
+
+	在书中apue中提到的方式记录在该链接中：http://www.kohala.com/start/libes.timers.txt
 */
 #include"../include/MyAPUE.h"
 
@@ -126,7 +128,7 @@ unsigned front_pop(void) {
 /*
 	SIGALRM的信号处理程序，没办法下一次的定时只能通过信号处理程序进行重定时
 */
-static void alrm_handler(int signo) {
+static void sig_alrm(int signo) {
 	void(*cur_pf)(void) = plist->cur_pf;
 
 	if (!empty()) {
@@ -153,7 +155,8 @@ static void sig_quit(int signo) {
 void settimer(unsigned second, void(*pf)(void)) {
 	unsigned remainsec;
 
-	if (signal(SIGALRM, alrm_handler) == SIG_ERR)
+	//这个signal不一定要放在这里，可以放在main函数中也可以
+	if (signal(SIGALRM, sig_alrm) == SIG_ERR)
 		err_sys("signal error\n");
 
 	remainsec = alarm(0);

@@ -14,6 +14,7 @@
 #include<errno.h>
 #include<sys/wait.h>
 #include<sys/time.h>
+#include<sys/resource.h>
 #include<time.h>
 #include<pthread.h>
 
@@ -35,7 +36,10 @@ extern void pr_mask(const char* str);
 extern void pr_exit(int status);
 extern void pr_resuid(void);
 extern void pr_now(void);
+extern void _pr_limit(const char* rname, int resource);
 extern void get_abstime(struct timespec* tsp, long seconds);
+
+#define pr_limit(resource) _pr_limit(#resource,resource)
 
 //信号传递
 extern void TELL_WAIT(void);

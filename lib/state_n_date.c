@@ -1,4 +1,5 @@
 #include"../include/MyAPUE.h"
+#include<string.h>
 //#define _RESUID
 
 void pr_exit(int status) {
@@ -16,6 +17,23 @@ void pr_exit(int status) {
 	else if (WIFSTOPPED(status))//½ø³ÌÔÝÍ£
 		printf("child stopped,        signal number = %d\n",
 			WSTOPSIG(status));
+}
+
+
+void _pr_limit(const char* rname, int resource) {
+	struct rlimit limitbuf;
+
+	if (getrlimit(resource, &limitbuf) != 0)
+		err_sys("getrlimit error\n");
+	printf("%s\n", rname);
+	if (limitbuf.rlim_cur == RLIM_INFINITY)
+		printf("soft limit: unlimited\n");
+	else
+		printf("soft limit: %lukb\n", limitbuf.rlim_cur / 1024);
+	if (limitbuf.rlim_max == RLIM_INFINITY)
+		printf("hard limit: unlimited\n");
+	else
+		printf("hard limit: %lukb\n", limitbuf.rlim_max / 1024);
 }
 
 
