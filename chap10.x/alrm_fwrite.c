@@ -16,6 +16,7 @@ static void sig_alrm(int signo) {
 		printf("received signal SIGALRM\n");
 }
 
+
 int main(void)
 {
 	FILE* pf;

@@ -192,7 +192,6 @@ void settimer(unsigned second, void(*pf)(void)) {
 /*
 * ----------------------main function--------------------------
 */
-
 int main(void)
 {
 	timer_list_init();

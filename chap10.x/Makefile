@@ -19,6 +19,7 @@ ${PROGS}:%:%.o Makefile
 clean:
 	rm -f ${PROGS} ${OBJS}
 	rm test.file iofile log
+
 rmprg:
 	rm -f ${PROGS}
 

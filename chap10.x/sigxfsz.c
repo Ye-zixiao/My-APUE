@@ -34,7 +34,6 @@ int main(void)
 	//复制文件
 	if ((fd = creat("test.file", DEFAULT_MODE)) == -1)
 		err_sys("creat error\n");
-
 	 /*		在实际中，Linux并不会因为进程写入的数据达到进程资源限
 	  *	制的软限制值而发生SIGXFSZ信号，它只是让write系统调用部分成
 	  *	功，并返回最后一个写入的数据量

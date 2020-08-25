@@ -4,6 +4,7 @@ static void sig_quit(int signo) {
 	exit(0);
 }
 
+
 int main(void)
 {
 	struct timeval timebuf;

@@ -89,7 +89,7 @@ int main(int argc,char*argv[])
 		if (waitpid(pid, NULL, 0) != pid)
 			err_sys("waitpid error\n");
 	}
-
 	fclose(fp);
+
 	exit(EXIT_SUCCESS);
 }
