@@ -6,6 +6,12 @@
 #define NUMNUM 10000000
 #define TNUM (NUMNUM/NTHR)
 
+/*
+ * 在自己的笔记本平台上由于CPU是2C4T，所以当线程数在0->4的增加过程中
+ * 性能会得到很大的提升，但是将线程数设置为大于4的值时基本上性能提升
+ * 就变得微乎其微了
+ * */
+
 pthread_barrier_t barrier;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
@@ -16,7 +22,8 @@ int comp(const int* lhs, const int* rhs) {
 
 /*
 	把一个大数组分成NTHR个线程数组，然后每一个线程数组做heap_sort，
-	完成后把每一个以及有序的线程数组合并到一个大的目标数组，使之有序
+	完成后把每一个已经有序的线程数组合并到一个大的目标数组，使之有序，
+	合并操作由主线程完成
 
 	线程0 线程1 线程2 线程3
 	1 2 | 5 6 | 3 4 | 7 8	局部有序
@@ -92,7 +99,7 @@ int main(void)
 		end.tv_nsec - start.tv_nsec;
 	for (int i = 0; i < NUMNUM; i++)
 		printf("%d\n", tar_arr[i]);
-	printf("sort took %.4f seconds\n", (double)nas / 1000000000.0);
+	fprintf(stderr,"sort took %.4f seconds\n", (double)nas / 1000000000.0);
 
 	free(src_arr);
 	free(tar_arr);

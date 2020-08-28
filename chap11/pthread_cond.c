@@ -82,7 +82,7 @@ void* consumer(void* args) {
 
 		printf("Thread(0x%lx) pop value %d\n", pthread_self(), value);
 		pthread_mutex_unlock(&q->lock);
-		pthread_cond_signal(&q->producer);//放在unlock的上面也可以
+		pthread_cond_signal(&q->producer);//放在unlock的上面也可以但效果不好
 	}
 }
 
