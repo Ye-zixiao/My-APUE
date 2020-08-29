@@ -14,8 +14,10 @@ void printfoo(const char* msg, const struct foo* fp) {
 }
 
 void* thread_func1(void* args) {
-	foo* pret = malloc(sizeof(foo));
-
+	foo* pret;
+	
+	if((pret=malloc(sizeof(foo)))==NULL)
+			err_sys("malloc error\n");
 	pret->a = 1; pret->b = 2;
 	pret->c = 3; pret->d = 4;
 	printfoo("thread 1:\n", pret);
