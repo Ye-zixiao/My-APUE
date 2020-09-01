@@ -1,4 +1,4 @@
-﻿#ifndef _MY_AUPE_H_
+#ifndef _MY_AUPE_H_
 #define _MY_APUE_H_
 
 #define _POSIX_C_SOURCE 200809L
@@ -31,7 +31,6 @@
 extern void err_sys(const char* msg);
 extern void err_exit(int err, const char* msg);
 
-
 //状态与信息
 extern void pr_mask(const char* str);
 extern void pr_exit(int status);
@@ -42,14 +41,12 @@ extern void get_abstime(struct timespec* tsp, long seconds);
 
 #define pr_limit(resource) _pr_limit(#resource,resource)
 
-
 //信号传递
 extern void TELL_WAIT(void);
 extern void TELL_PARENT(pid_t pid);
 extern void TELL_CHILD(pid_t pid);
 extern void WAIT_PARENT(void);
 extern void WAIT_CHILD(void);
-
 
 //特殊系统函数
 typedef void Sigfunc(int);
@@ -59,14 +56,14 @@ extern void Abort(void);
 extern unsigned int Sleep(unsigned int seconds);
 extern Sigfunc* mysignal(int signo, Sigfunc*sighandler);
 
-
 //自定义线程函数
 extern void Pthread_create(pthread_t* tid,
 	const pthread_attr_t* attr, void* (*thread_func)(void*), void* args);
 extern void Pthread_join(pthread_t tid, void** rval_ptr);
 
-
 //算法例程
+extern void voilent_sort(int arr[], int n, int(*pf)(const int*, const int*));
 extern void heap_sort(int arr[], int n, int(*pf)(const int*, const int*));
+extern void bubble_sort(int arr[], int n, int(*pf)(const int*, const int*));
 
 #endif

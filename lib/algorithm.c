@@ -1,5 +1,6 @@
 #include"../include/MyAPUE.h"
 
+
 typedef int comp(const int*, const int*);
 
 static void swap(int* lhs, int* rhs) {
@@ -8,6 +9,10 @@ static void swap(int* lhs, int* rhs) {
 	*rhs = tmp;
 }
 
+
+/*
+	堆排序
+*/
 static void heapify(int tree[], int n, int i, comp*pf) {
 	if (i >= n)return;
 
@@ -36,5 +41,34 @@ void heap_sort(int arr[], int n, comp*pf) {
 	for (int i = n - 1; i > 0; --i) {
 		swap(&arr[i], &arr[0]);
 		heapify(arr, i, 0, pf);
+	}
+}
+
+
+/*
+	冒泡排序
+*/
+static void bubble(int arr[], int n, comp* pf) {
+	for (int i = 0; i < n-1; ++i) {
+		if (pf(&arr[i], &arr[i + 1]) > 0)
+			swap(&arr[i], &arr[i + 1]);
+	}
+}
+
+void bubble_sort(int arr[], int n, comp* pf) {
+	for (int i = n; i > 0; --i) {
+		bubble(arr, i, pf);
+	}
+}
+
+
+/*
+	暴力排序
+*/
+void voilent_sort(int arr[], int n, comp*pf) {
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; j++)
+			if (pf(&arr[i], &arr[j]) > 0)
+				swap(&arr[i], &arr[j]);
 	}
 }

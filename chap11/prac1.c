@@ -21,6 +21,7 @@ void* thread_func1(void* args) {
 	pret->a = 1; pret->b = 2;
 	pret->c = 3; pret->d = 4;
 	printfoo("thread 1:\n", pret);
+
 	pthread_exit((void*)pret);
 }
 

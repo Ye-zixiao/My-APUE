@@ -2,7 +2,7 @@
 #include<limits.h>
 
 #define DEBUG
-#define NTHR 4	//更改次数来线程数的改变，通过实验知道多线程可以比单线程（不包括main线程）具有更高的效率
+#define NTHR 8	//更改次数来线程数的改变，通过实验知道多线程可以比单线程（不包括main线程）具有更高的效率
 #define NUMNUM 10000000
 #define TNUM (NUMNUM/NTHR)
 
