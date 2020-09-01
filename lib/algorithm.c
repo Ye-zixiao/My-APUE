@@ -72,3 +72,25 @@ void voilent_sort(int arr[], int n, comp*pf) {
 				swap(&arr[i], &arr[j]);
 	}
 }
+
+
+/*
+	选择排序
+*/
+static int* _select(int arr[], int n, comp* pf) {
+	int min_max = arr[0];
+	int pos = 0;
+
+	for (int i = 1; i < n; ++i) {
+		if (pf(&min_max, &arr[i]) > 0) {
+			min_max = arr[i];
+			pos = i;
+		}
+	}
+	return &arr[pos];
+}
+
+void select_sort(int arr[], int n, comp* pf) {
+	for (int i = n; i > 0; --i)
+		swap(&arr[i - 1], _select(arr, i, pf));
+}

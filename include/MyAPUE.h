@@ -63,6 +63,7 @@ extern void Pthread_join(pthread_t tid, void** rval_ptr);
 
 //算法例程
 extern void voilent_sort(int arr[], int n, int(*pf)(const int*, const int*));
+extern void select_sort(int arr[], int n, int(*pf)(const int*, const int*));
 extern void heap_sort(int arr[], int n, int(*pf)(const int*, const int*));
 extern void bubble_sort(int arr[], int n, int(*pf)(const int*, const int*));
 
