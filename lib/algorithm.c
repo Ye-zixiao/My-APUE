@@ -94,3 +94,24 @@ void select_sort(int arr[], int n, comp* pf) {
 	for (int i = n; i > 0; --i)
 		swap(&arr[i - 1], _select(arr, i, pf));
 }
+
+
+/*
+	插入排序
+*/
+static void _insert(int arr[], int n, comp* pf) {
+	int key = arr[n - 1];
+	int i = n - 2;
+
+	for (; i >= 0; i--) {
+		if (pf(&arr[i], &key) > 0) break;
+		arr[i + 1] = arr[i];
+	}
+	arr[i + 1] = key;
+}
+
+void insert_sort(int arr[], int n, comp* pf) {
+	for (int i = 2; i <= n; i++) {
+		_insert(arr, i, pf);
+	}
+}

@@ -60,10 +60,12 @@ extern Sigfunc* mysignal(int signo, Sigfunc*sighandler);
 extern void Pthread_create(pthread_t* tid,
 	const pthread_attr_t* attr, void* (*thread_func)(void*), void* args);
 extern void Pthread_join(pthread_t tid, void** rval_ptr);
+extern int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
 
 //算法例程
 extern void voilent_sort(int arr[], int n, int(*pf)(const int*, const int*));
 extern void select_sort(int arr[], int n, int(*pf)(const int*, const int*));
+extern void insert_sort(int arr[], int n, int(*pf)(const int*, const int*));
 extern void heap_sort(int arr[], int n, int(*pf)(const int*, const int*));
 extern void bubble_sort(int arr[], int n, int(*pf)(const int*, const int*));
 
