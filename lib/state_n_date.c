@@ -2,12 +2,11 @@
 #include<string.h>
 //#define _RESUID
 
-
 void pr_exit(int status) {
-	if (WIFEXITED(status))//������ֹ
+	if (WIFEXITED(status))//正常终止
 		printf("normal termination,   exit status   = %d\n",
 			WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))//�쳣��ֹ
+	else if (WIFSIGNALED(status))//异常终止
 		printf("abnormal termination, signal number = %d%s\n",
 			WTERMSIG(status),
 #ifdef WCOREDUMP
@@ -15,7 +14,7 @@ void pr_exit(int status) {
 #else
 		"");
 #endif
-	else if (WIFSTOPPED(status))//������ͣ
+	else if (WIFSTOPPED(status))//进程暂停
 		printf("child stopped,        signal number = %d\n",
 			WSTOPSIG(status));
 }
@@ -74,7 +73,7 @@ void pr_mask(const char* str) {
 }
 
 
-void pr_now(void) {//��ӡ��ǰʱ��
+void pr_now(void) {//打印当前时间
 	const int BufSize = 64;
 	struct timeval timevalbuf;
 	struct tm* ptm;
@@ -90,10 +89,74 @@ void pr_now(void) {//��ӡ��ǰʱ��
 
 
 /*
-	��������pthread_cond_timewait�����ĺ������ɾ��ԵĶ�ʱʱ��
+	用来帮助pthread_cond_timewait这样的函数生成绝对的定时时间
 */
 void get_abstime(struct timespec* tsp, long seconds) {
 	if (clock_gettime(CLOCK_REALTIME, tsp) != 0)
 		err_sys("clock_gettime error\n");
 	tsp->tv_sec += seconds;
 }
+
+
+/*
+	一种非线程安全获取环境变量值的getenv函数实现
+*/
+static char envbuf[BUFSIZE];
+extern char** environ;
+
+char* mygetenv(const char* name) {
+	size_t len = strlen(name);
+
+	for (int i = 0; environ[i] != NULL; ++i) {
+		if (strncmp(environ[i], name, len) == 0 &&
+			environ[i][len] == '=') {
+			strncpy(envbuf, &environ[i][len + 1], BUFSIZE);
+			return envbuf;
+		}
+	}
+	return NULL;
+}
+
+
+/*
+	具有线程安全性且异步信号安全的getenv函数实现
+*/
+pthread_mutex_t env_mutex;
+
+static pthread_once_t init_done = PTHREAD_ONCE_INIT;
+
+static void env_mutexinit(void) {
+	pthread_mutexattr_t mutexattr;
+
+	pthread_mutexattr_init(&mutexattr);
+	//这里不适用递归锁，也可以保证mygetenv_r函数具有线程安全性，但则并不能保证异步信号安全
+	pthread_mutexattr_settype(&mutexattr, PTHREAD_MUTEX_RECURSIVE);
+	pthread_mutex_init(&env_mutex, &mutexattr);
+	pthread_mutexattr_destroy(&mutexattr);
+}
+
+int mygetenv_r(const char* name, char* buf, int buflen) {
+	int len, keylen;
+
+	len = strlen(name);
+	//只有最初执行的线程会对执行env_mutexinit例程，后面的线程不会执行之
+	pthread_once(&init_done, env_mutexinit);
+	pthread_mutex_lock(&env_mutex);
+	for (int i = 0; environ[i] != NULL; ++i) {
+		if (strncmp(name, environ[i], len) == 0 && environ[i][len] == '=') {
+			keylen = strlen(&environ[i][len + 1]);
+			if (keylen >= buflen) {
+				pthread_mutex_unlock(&env_mutex);
+				return ENOSPC;
+			}
+			else {
+				strncpy(buf, &environ[i][len + 1], buflen);
+				pthread_mutex_unlock(&env_mutex);
+				return 0;
+			}
+		}
+	}
+	pthread_mutex_unlock(&env_mutex);
+	return ENOENT;
+}
+

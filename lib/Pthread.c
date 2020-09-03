@@ -39,3 +39,17 @@ int pr_mutexattr(const pthread_mutexattr_t* mutexattr) {
 
 	return err;
 }
+
+
+int makeDetachedThread(void* (*thread_func)(void*), void* args) {
+	pthread_attr_t attr;
+	pthread_t tid;
+	int err;
+
+	if ((err = pthread_attr_init(&attr)) != 0)
+		return err;
+	if ((err = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) == 0)
+		err = pthread_create(&tid, &attr, thread_func, args);
+	pthread_attr_destroy(&attr);
+	return err;
+}
