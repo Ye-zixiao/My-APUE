@@ -160,3 +160,30 @@ int mygetenv_r(const char* name, char* buf, int buflen) {
 	return ENOENT;
 }
 
+
+/*
+	打印互斥量属性对象中记录的属性
+*/
+int pr_mutexattr(const pthread_mutexattr_t* mutexattr) {
+	static const char* typestr[] = {
+		"PTHREAD_MUTEX_NORMAL",
+		"PTHREAD_MUTEX_RECURSIVE",
+		"PTHREAD_MUTEX_ERRORCHECK",
+		"OTHER"
+	};
+	int pshared, robust, type, err;
+
+	if ((err = pthread_mutexattr_getpshared(mutexattr, &pshared)) != 0)
+		return err;
+	if ((err = pthread_mutexattr_getrobust(mutexattr, &robust)) != 0)
+		return err;
+	if ((err = pthread_mutexattr_gettype(mutexattr, &type)) != 0)
+		return err;
+	printf("mutex pshared: %s\n", pshared == PTHREAD_PROCESS_SHARED ?
+		"PTHREAD_PROCESS_SHARED" : "PTHREAD_PROCESS_PRIVATE");
+	printf("mutex robust : %s\n", robust == PTHREAD_MUTEX_ROBUST ?
+		"PTHREAD_MUTEX_ROBUST" : "PTHREAD_MUTEX_STALLED");
+	printf("mutex type   : %s\n", typestr[type > 3 ? 3 : type]);
+
+	return err;
+}

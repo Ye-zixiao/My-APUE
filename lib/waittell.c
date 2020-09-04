@@ -17,7 +17,7 @@ void TELL_WAIT(void) {
 	sigaddset(&newmask, SIGUSR1);
 	sigaddset(&newmask, SIGUSR2);
 
-	//是当前进程对SIGUSRx信号进行阻塞
+	//鏄綋鍓嶈繘绋嬪SIGUSRx淇″彿杩涜闃诲
 	if (sigprocmask(SIG_BLOCK, &newmask, &oldmask) == -1)
 		err_sys("sigprocmask error\n");
 }
@@ -32,7 +32,7 @@ void TELL_CHILD(pid_t pid) {
 
 void WAIT_CHILD(void) {
 	while (sigflag == 0)
-		sigsuspend(&zeromask);//暂时解除阻塞并休眠，直到子进程发送SIGUSR2信号过来
+		sigsuspend(&zeromask);//鏆傛椂瑙ｉ櫎闃诲骞朵紤鐪狅紝鐩村埌瀛愯繘绋嬪彂閫丼IGUSR2淇″彿杩囨潵
 	sigflag = 0;
 
 	if (sigprocmask(SIG_SETMASK, &oldmask, NULL) == -1)
