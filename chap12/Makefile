@@ -5,7 +5,7 @@ cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
 
 SRCS:=makedetached.c mutex_robust.c recursive_func12.c norecursive_func12.c \
 		recursive_retry.c flockfile.c mygetenv.c mygetenv_r.c pthread_key.c \
-		pthread_sigmask.c atfork.c
+		pthread_sigmask.c atfork.c threadsort.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 

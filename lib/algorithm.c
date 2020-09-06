@@ -10,6 +10,18 @@ static void swap(int* lhs, int* rhs) {
 }
 
 
+//if left > right, return 1
+int greater(const int* lhs, const int* rhs) {
+	return *lhs > * rhs ? 1 : 0;
+}
+
+
+//if left < right, return 1
+int shorter(const int* lhs, const int* rhs) {
+	return *lhs < *rhs ? 1 : 0;
+}
+
+
 /*
 	堆排序
 */

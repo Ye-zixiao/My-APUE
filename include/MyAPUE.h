@@ -29,55 +29,57 @@
 
 
 //错误例程
-extern void err_sys(const char* msg);
-extern void err_exit(int err, const char* msg);
+void err_sys(const char* msg);
+void err_exit(int err, const char* msg);
 
 
 //状态与信息
-extern void pr_mask(const char* str);
-extern void pr_exit(int status);
-extern void pr_resuid(void);
-extern void pr_now(void);
-extern void _pr_limit(const char* rname, int resource);
-extern void get_abstime(struct timespec* tsp, long seconds);
-extern int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
+void pr_mask(const char* str);
+void pr_exit(int status);
+void pr_resuid(void);
+void pr_now(void);
+void _pr_limit(const char* rname, int resource);
+void get_abstime(struct timespec* tsp, long seconds);
+int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
 
 #define pr_limit(resource) _pr_limit(#resource,resource)
 
-extern char* mygetenv(const char* name);
-extern int mygetenv_r(const char* name, char* buf, int buflen);
+char* mygetenv(const char* name);
+int mygetenv_r(const char* name, char* buf, int buflen);
 
 
 //信号传递
-extern void TELL_WAIT(void);
-extern void TELL_PARENT(pid_t pid);
-extern void TELL_CHILD(pid_t pid);
-extern void WAIT_PARENT(void);
-extern void WAIT_CHILD(void);
+void TELL_WAIT(void);
+void TELL_PARENT(pid_t pid);
+void TELL_CHILD(pid_t pid);
+void WAIT_PARENT(void);
+void WAIT_CHILD(void);
 
 
 //特殊系统函数
 typedef void Sigfunc(int);
-extern int System(const char* cmdstring);
-extern int mysystem(const char* cmdstring);
-extern void Abort(void);
-extern unsigned int Sleep(unsigned int seconds);
-extern Sigfunc* mysignal(int signo, Sigfunc*sighandler);
+int System(const char* cmdstring);
+int mysystem(const char* cmdstring);
+void Abort(void);
+unsigned int Sleep(unsigned int seconds);
+Sigfunc* mysignal(int signo, Sigfunc*sighandler);
 
 
 //自定义线程函数
-extern void Pthread_create(pthread_t* tid,
+void Pthread_create(pthread_t* tid,
 	const pthread_attr_t* attr, void* (*thread_func)(void*), void* args);
-extern void Pthread_join(pthread_t tid, void** rval_ptr);
-extern int makeDetachedThread(void* (*thread_func)(void*), void* args);
+void Pthread_join(pthread_t tid, void** rval_ptr);
+int makeDetachedThread(void* (*thread_func)(void*), void* args);
 
 
 //算法例程
-extern void voilent_sort(int arr[], int n, int(*pf)(const int*, const int*));
-extern void select_sort(int arr[], int n, int(*pf)(const int*, const int*));
-extern void insert_sort(int arr[], int n, int(*pf)(const int*, const int*));
-extern void heap_sort(int arr[], int n, int(*pf)(const int*, const int*));
-extern void bubble_sort(int arr[], int n, int(*pf)(const int*, const int*));
+int greater(const int*, const int*);
+int shorter(const int*, const int*);
+void voilent_sort(int arr[], int n, int(*pf)(const int*, const int*));
+void select_sort(int arr[], int n, int(*pf)(const int*, const int*));
+void insert_sort(int arr[], int n, int(*pf)(const int*, const int*));
+void heap_sort(int arr[], int n, int(*pf)(const int*, const int*));
+void bubble_sort(int arr[], int n, int(*pf)(const int*, const int*));
 
 
 #endif
