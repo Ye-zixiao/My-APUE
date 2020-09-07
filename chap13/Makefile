@@ -3,7 +3,7 @@ cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
 		-lbsd -O  #-Werror
 #-WL,-rpath,../lib -L../lib -lmyapue 的意思是到相对路径../lib中找动态链接库
 
-SRCS:=
+SRCS:=daemonize.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 

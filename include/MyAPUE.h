@@ -29,8 +29,20 @@
 
 
 //错误例程
-void err_sys(const char* msg);
-void err_exit(int err, const char* msg);
+void err_ret(const char* fmt, ...);
+void err_msg(const char* fmt, ...);
+void err_cont(int err, const char* fmt, ...);
+void err_sys(const char* fmt, ...);
+void err_exit(int err, const char* fmt, ...);
+void err_dump(const char* fmt, ...);
+void err_quit(const char* fmt, ...);
+
+void log_open(const char* ident, int option, int facility);
+void log_ret(const char* fmt, ...);
+void log_msg(const char* fmt, ...);
+void log_sys(const char* fmt, ...);
+void log_quit(const char* fmt, ...);
+void log_exit(int error, const char* fmt, ...);
 
 
 //状态与信息

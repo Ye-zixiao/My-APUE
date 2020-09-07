@@ -79,7 +79,7 @@ void bubble_sort(int arr[], int n, comp* pf) {
 */
 void voilent_sort(int arr[], int n, comp*pf) {
 	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; j++)
+		for (int j = i + 1; j < n; j++)
 			if (pf(&arr[i], &arr[j]) > 0)
 				swap(&arr[i], &arr[j]);
 	}

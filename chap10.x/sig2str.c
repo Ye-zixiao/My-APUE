@@ -1,6 +1,8 @@
 ﻿#include"../include/MyAPUE.h"
 #include<string.h>
 
+//这段代码现在好像不能编译了，Linux上我不太清楚为了什么找不到
+//sys_siglist的定义，而且手册也更推荐使用strsignal来代替之
 extern const char* const sys_siglist[];
 
 int Sig2Str(int signo, char* str) {
