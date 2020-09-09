@@ -77,6 +77,7 @@ int main(void)
 {
 	myputenv("USER=MYDAD");
 	myputenv("PATH=(null)");
+	myputenv("SHOW=CODE");
 	myputenv("LS_COLORS=(null)");
 	myputenv("HELLO=WORLD");
 	for (int i = 0; environ[i] != NULL; ++i)
