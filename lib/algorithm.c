@@ -9,17 +9,20 @@ static void swap(int* lhs, int* rhs) {
 	*rhs = tmp;
 }
 
-
-//if left > right, return 1
+/*
+*	注意：
+*		1、当需要从小到大的顺序时，将greater传入排序函数
+*		2、当需要从大到小的顺序时，将shorter传入排序函数
+*/
 int greater(const int* lhs, const int* rhs) {
 	return *lhs > * rhs ? 1 : 0;
 }
 
 
-//if left < right, return 1
 int shorter(const int* lhs, const int* rhs) {
 	return *lhs < *rhs ? 1 : 0;
 }
+
 
 
 /*
@@ -103,8 +106,8 @@ static int* _select(int arr[], int n, comp* pf) {
 }
 
 void select_sort(int arr[], int n, comp* pf) {
-	for (int i = n; i > 0; --i)
-		swap(&arr[i - 1], _select(arr, i, pf));
+	for (int i = 0; i < n; ++i)
+		swap(&arr[i], _select(&arr[i], n - i, pf));
 }
 
 
@@ -116,7 +119,7 @@ static void _insert(int arr[], int n, comp* pf) {
 	int i = n - 2;
 
 	for (; i >= 0; i--) {
-		if (pf(&arr[i], &key) > 0) break;
+		if (pf(&key, &arr[i]) > 0) break;
 		arr[i + 1] = arr[i];
 	}
 	arr[i + 1] = key;
@@ -126,4 +129,33 @@ void insert_sort(int arr[], int n, comp* pf) {
 	for (int i = 2; i <= n; i++) {
 		_insert(arr, i, pf);
 	}
+}
+
+
+/*
+	归并排序
+*/
+void _merge(int arr[], int left, int mid, int right, comp* pf) {
+	int lsize = mid - left;
+	int rsize = right - mid + 1;
+	int larr[lsize];
+	int rarr[rsize];
+
+	for (int i = 0; i < lsize; ++i)
+		larr[i] = arr[left + i];
+	for (int i = 0; i < rsize; ++i)
+		rarr[i] = arr[mid + i];
+
+	int i = 0, j = 0, k = 0;
+	while (i < lsize && j < rsize) {
+		if (pf(&larr[i], &rarr[j]) > 0)
+			arr[k++] = rarr[j++];
+		else
+			arr[k++] = larr[i++];
+	}
+	
+	while (i < lsize)
+		arr[k++] = larr[i++];
+	while (j < rsize)
+		arr[k++] = rarr[j++];
 }

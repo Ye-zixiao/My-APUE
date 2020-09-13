@@ -58,6 +58,7 @@ int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
 
 char* mygetenv(const char* name);
 int mygetenv_r(const char* name, char* buf, int buflen);
+char* getenv_r(const char* name);
 
 
 //信号传递
@@ -92,6 +93,13 @@ void select_sort(int arr[], int n, int(*pf)(const int*, const int*));
 void insert_sort(int arr[], int n, int(*pf)(const int*, const int*));
 void heap_sort(int arr[], int n, int(*pf)(const int*, const int*));
 void bubble_sort(int arr[], int n, int(*pf)(const int*, const int*));
+void mergeSort(int arr[], int n, int(*pf)(const int*, const int*));
+void _merge(int arr[], int left, int mid, int right, int(*pf)(const int*, const int*));
 
+
+//守护进程
+int lockfile(int);
+void daemonize(const char* str);
+int singleDaemon(const char* file);
 
 #endif

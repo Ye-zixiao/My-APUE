@@ -3,7 +3,7 @@
 
 //#define DEBUG
 #define NTHR 8
-#define NUMNUM 10000000
+#define NUMNUM 100000
 #define TNUM (NUMNUM/NTHR)
 
 pthread_barrier_t barrier;
