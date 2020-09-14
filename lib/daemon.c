@@ -8,18 +8,10 @@
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 
 
-//lockfile 鏂囦欢鏆傛椂鏀惧湪杩欓噷
-int lockfile(int fd) {
-	struct flock flo;
-
-	flo.l_type = F_WRLCK;
-	flo.l_start = 0;
-	flo.l_whence = SEEK_SET;
-	flo.l_len = 0;
-	return fcntl(fd, F_SETLK, &flo);
-}
-
-
+/**
+ * 守护进程初始化函数.
+ * @param str 当前守护进程名字
+ */
 void daemonize(const char* str) {
 	struct sigaction sa;
 	int fd0, fd1, fd2;
@@ -64,6 +56,11 @@ void daemonize(const char* str) {
 }
 
 
+/**
+ * 指定一个路径创建一个守护进程锁文件，确保只有单例守护进程在执行.
+ * @param file 指定锁文件路径
+ * @return 当前是否有守护进程副本在运行
+ */
 int singleDaemon(const char* file) {
 	int fd;
 	char buf[16];

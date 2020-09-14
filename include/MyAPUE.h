@@ -21,11 +21,6 @@
 #define BUFSIZE 4096
 #define SBUFSIZE 64
 
-/*
-* -------------------------------------------------------------
-*                 自定义函数原型
-* -------------------------------------------------------------
-*/
 
 
 //错误例程
@@ -88,18 +83,25 @@ int makeDetachedThread(void* (*thread_func)(void*), void* args);
 //算法例程
 int greater(const int*, const int*);
 int shorter(const int*, const int*);
-void voilent_sort(int arr[], int n, int(*pf)(const int*, const int*));
-void select_sort(int arr[], int n, int(*pf)(const int*, const int*));
-void insert_sort(int arr[], int n, int(*pf)(const int*, const int*));
-void heap_sort(int arr[], int n, int(*pf)(const int*, const int*));
-void bubble_sort(int arr[], int n, int(*pf)(const int*, const int*));
-void mergeSort(int arr[], int n, int(*pf)(const int*, const int*));
-void _merge(int arr[], int left, int mid, int right, int(*pf)(const int*, const int*));
+void BFSort(int arr[], int n, int(*)(const int*, const int*));
+void SelectSort(int arr[], int n, int(*)(const int*, const int*));
+void InsertionSort(int arr[], int n, int(*)(const int*, const int*));
+void HeapSort(int arr[], int n, int(*)(const int*, const int*));
+void BubbleSort(int arr[], int n, int(*)(const int*, const int*));
+void mergeArr(int arr[], int, int, int, int(*)(const int*, const int*));
+void MergeSort(int arr[], int n, int(*)(const int*, const int*));
 
 
-//守护进程
-int lockfile(int);
+//守护进程函数
 void daemonize(const char* str);
 int singleDaemon(const char* file);
+
+
+//高级IO函数
+int lockfile(int);
+int set_fd(int, int);
+int set_fl(int, int);
+int clr_fd(int, int);
+int clr_fl(int, int);
 
 #endif

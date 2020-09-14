@@ -63,7 +63,7 @@ void merge(const int* src_arr, int* tar_arr) {
 void* thread_func(void* args) {
 	int* arr = (int*)args;
 
-	heap_sort(arr, TNUM, comp);
+	MergeSort(arr, TNUM, comp);
 	pthread_barrier_wait(&barrier);
 	
 	return (void*)NULL;

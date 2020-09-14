@@ -3,7 +3,7 @@
 
 //#define DEBUG
 #define NTHR 8
-#define NUMNUM 100000
+#define NUMNUM 1000000
 #define TNUM (NUMNUM/NTHR)
 
 pthread_barrier_t barrier;
@@ -44,8 +44,7 @@ void merge(int dest_arr[], const int src_arr[]) {
 void* thread_func(void* args) {
 	int* arr = (int*)args;
 
-	heap_sort(arr, TNUM, greater);
-	//voilent_sort(arr,TNUM, greater);
+	HeapSort(arr, TNUM, greater);
 #ifdef DEBUG
 	flockfile(stdout);
 	pr(arr,TNUM);

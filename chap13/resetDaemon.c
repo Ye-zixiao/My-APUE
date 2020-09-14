@@ -1,3 +1,7 @@
+/**
+ * 使用具有专门处理信号的线程来解决单实例
+ * 守护进程重读配置文件问题
+ */
 #include"../include/MyAPUE.h"
 #include<syslog.h>
 #include<fcntl.h>
@@ -17,6 +21,9 @@ sigset_t mask;
 char daemonbuf[BUFSIZE];
 
 
+/**
+ * 守护进程重读配置文件
+ */
 void reread(void) {
 	int fd;
 	int err;
@@ -24,17 +31,27 @@ void reread(void) {
 	if ((fd = open(CONFFILE, O_RDONLY)) < 0) {
 		syslog(LOG_INFO, "reread can't open CONFFILE");
 		strcpy(daemonbuf, "NULL");
+		daemonbuf[4] = '\0';
+		close(fd);
 		return;
 	}
 	if ((err = read(fd, daemonbuf, BUFSIZE - 1)) < 0) {
 		syslog(LOG_WARNING, "read of reread error");
+		daemonbuf[4] = '\0';
 		strcpy(daemonbuf, "NULL");
+		close(fd);
+		return;
 	}
 	daemonbuf[err] = '\0';
 	close(fd);
 }
 
 
+/**
+ * 守护进程中专门处理信号的线程函数
+ * @param args 不使用
+ * @return 无太多意义
+ */
 void* sigthread(void* args) {
 	int err, signo;
 
@@ -72,12 +89,15 @@ int main(int argc, char* argv[])
 	else
 		cmd++;
 
+	//守护进程初始化，并确保只有单实例守护进程副本在运行
 	daemonize(cmd);
 	if (singleDaemon(LOCKFILE) != 0) {
 		syslog(LOG_ERR, "daemon already running");
 		exit(EXIT_FAILURE);
 	}
 
+	//使守护进程恢复对SIGHUP的默认处理动作，主线程阻塞所有信号，
+	//但是专门处理信号的线程会处理之
 	sa.sa_handler = SIG_DFL;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
@@ -87,10 +107,11 @@ int main(int argc, char* argv[])
 	if ((err = pthread_sigmask(SIG_BLOCK, &mask, NULL)) != 0)
 		err_exit(err, "SIG_BLOCK error");
 
+	//创建处理信号的线程
 	if ((err = pthread_create(&thd, NULL, sigthread, (void*)NULL)) != 0)
 		err_exit(err, "can't create thread");
 
-
+	//持续将conf文件中的数据输出到log文件
 	if ((fd = open(LOGFILE, O_CREAT | O_WRONLY | O_TRUNC, DEFAULTMODE)) < 0)
 		err_quit("%s: can't open LOFILE", cmd);
 	reread();
@@ -101,6 +122,8 @@ int main(int argc, char* argv[])
 
 	exit(EXIT_SUCCESS);
 }
+
+
 
 /*
 实验操作：

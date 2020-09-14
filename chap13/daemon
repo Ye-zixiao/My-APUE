@@ -4,7 +4,7 @@
 	2、用户层守护进程的父进程基本上是/sbin/init进程（在Linux上实际上是systemd，其pid
 		为1）
 内核守护进程的特点是：
-	1、pid为0的init进程和pid为1的kthreadd进程必然是内核守护进程
+	1、pid为1的init进程和pid为2的kthreadd进程必然是内核守护进程
 	2、其他的内核守护进程都是由kthreadd进程创建而来，使用ps -efj命令打印输出可以看到
 		基本上内核守护进程都会被[]括起来，所以它们的父进程必然是kthreadd进程，ppid为2
 
