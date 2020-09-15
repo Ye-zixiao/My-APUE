@@ -3,26 +3,63 @@
 
 
 /**
- * 使用fcntl函数设置文件记录锁.
- * @param fd 文件描述符
- * @return 是否设置成功
+ * 获取/设置(注册)文件锁万能函数.
+ * @param	fd		文件描述符
+ * @param	cmd		fcntl记录锁获取/设置标志
+ * @param	type	记录锁类型
+ * @param	offset	相对于whence的起始位置
+ * @param	whence	SEEK_SET、SEEK_END、SEEK_CUR
+ * @param	len		文件加锁区长度
+ * @return			是否成功
  */
-int lockfile(int fd) {
-	struct flock flo;
+int lock_reg(int fd, int cmd, int type, off_t offset, int whence, int len) {
+	struct flock flockbuf;
 
-	flo.l_type = F_WRLCK;
-	flo.l_start = 0;
-	flo.l_whence = SEEK_SET;
-	flo.l_len = 0;
-	return fcntl(fd, F_SETLK, &flo);
+	flockbuf.l_type = type;
+	flockbuf.l_whence = whence;
+	flockbuf.l_start = offset;
+	flockbuf.l_len = len;
+
+	return fcntl(fd, cmd, &flockbuf);
 }
 
 
 /**
- * 设置一个打开文件描述符中的一个或多个描述符标志.
- * @param fd 文件描述符
- * @param flags 欲加入的文件描述符标志
- * @return 是否成功
+ * 测试文件记录锁是否被加锁
+ * @param	fd		文件描述符
+ * @param	cmd		fcntl记录锁获取/设置标志
+ * @param	type	记录锁类型
+ * @param	offset	相对于whence的起始位置
+ * @param	whence	SEEK_SET、SEEK_END、SEEK_CUR
+ * @param	len		文件加锁区长度
+ * @return			返回0表示记录锁没有被其他进程持有，否则返回持有记录锁进程ID
+ */
+int lock_test(int fd, int cmd, int type, off_t offset, int whence, int len) {
+	struct flock flockbuf;
+
+	flockbuf.l_type = type;
+	flockbuf.l_whence = whence;
+	flockbuf.l_start = offset;
+	flockbuf.l_len = len;
+
+	if (fcntl(fd, F_GETLK, &flockbuf) < 0)
+		err_sys("fcntl error");
+	if (flockbuf.l_type == F_UNLCK)
+		return 0;
+	return flockbuf.l_pid;
+}
+
+
+/**
+ * 使用fcntl函数设置文件记录锁
+ */
+int lockfile(int fd) {
+	return write_lock(fd, 0, SEEK_SET, 0);
+}
+
+
+/**
+ * 设置一个打开文件描述符中的一个或多个描述符标志
  */
 int set_fd(int fd, int flags) {
 	int val;
@@ -35,10 +72,7 @@ int set_fd(int fd, int flags) {
 
 
 /**
- * 清除一个打开文件描述符中的一个或多个描述符标志. 
- * @param fd 文件描述符
- * @param flags 欲清理的文件描述符标志
- * @return 是否成功
+ * 清除一个打开文件描述符中的一个或多个描述符标志
  */
 int clr_fd(int fd, int flags) {
 	int val;
@@ -51,10 +85,7 @@ int clr_fd(int fd, int flags) {
 
 
 /**
- * 设置一个文件描述符指向的文件表项中的一个或多个文件状态标志.
- * @param fd 文件描述符
- * @param flags 欲加入的文件状态标志
- * @return 是否成功
+ * 设置一个文件描述符指向的文件表项中的一个或多个文件状态标志
  */
 int set_fl(int fd, int flags) {
 	int val;
@@ -67,10 +98,7 @@ int set_fl(int fd, int flags) {
 
 
 /**
- * 清除一个文件描述符指向的文件表项中的一个或多个文件状态标志.
- * @param fd 文件描述符
- * @param flags 欲清除的文件状态标志
- * @return 是否成功
+ * 清除一个文件描述符指向的文件表项中的一个或多个文件状态标志
  */
 int clr_fl(int fd, int flags) {
 	int val;
