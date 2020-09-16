@@ -51,14 +51,6 @@ int lock_test(int fd, int cmd, int type, off_t offset, int whence, int len) {
 
 
 /**
- * 使用fcntl函数设置文件记录锁
- */
-int lockfile(int fd) {
-	return write_lock(fd, 0, SEEK_SET, 0);
-}
-
-
-/**
  * 设置一个打开文件描述符中的一个或多个描述符标志
  */
 int set_fd(int fd, int flags) {

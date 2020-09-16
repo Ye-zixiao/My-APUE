@@ -6,9 +6,6 @@
 #include <syslog.h>
 #include <string.h>
 
-extern int lockfile(int);
-extern int singleDaemon(const char*);
-
 #define LOCKFILE "/tmp/mytestdaemon.pid"
 #define CONFFILE "/tmp/mytestdaemon.conf"
 #define LOGFILE "/tmp/mytestdaemon.outfile"

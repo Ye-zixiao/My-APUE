@@ -121,7 +121,6 @@ int singleDaemon(const char* file);
 /**
  * 高级I/O函数
  */
-int lockfile(int);
 int set_fd(int, int);
 int set_fl(int, int);
 int clr_fd(int, int);
@@ -142,6 +141,8 @@ int lock_test(int, int, int, off_t, int, int);
 	lock_reg((fd), F_SETLKW, F_WRLCK, (offset), (whence), (len))
 #define un_lock(fd, offset, whence, len) \
 	lock_reg((fd), F_SETLK, F_UNLCK, (offset), (whence), (len))
+
+#define lockfile(fd) write_lock((fd), 0, SEEK_SET, 0)
 
 /**
  * 测试文件记录锁是否被加锁
