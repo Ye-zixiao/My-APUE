@@ -5,8 +5,7 @@
 #include<sys/stat.h>
 #include<string.h>
 
-#define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
-
+#define LOCKMODE FILE_MODE
 
 /**
  * 守护进程初始化函数.
@@ -47,7 +46,7 @@ void daemonize(const char* str) {
 	fd0 = open("/dev/null", O_RDWR);
 	fd1 = dup(fd0);
 	fd2 = dup(fd1);
-	
+
 	openlog(str, LOG_PERROR, LOG_DAEMON);
 	if (fd0 != 0 || fd1 != 1 || fd2 != 2) {
 		syslog(LOG_ERR, "unexpected file descriptors %d %d %d", fd0, fd1, fd2);
@@ -69,7 +68,7 @@ int singleDaemon(const char* file) {
 		syslog(LOG_ERR, "can't open lockfile %s: %m", file);
 		exit(EXIT_FAILURE);
 	}
-	
+
 	if (lockfile(fd) < 0) {
 		if (errno == EACCES || errno == EAGAIN) {
 			close(fd);

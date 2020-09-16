@@ -1,6 +1,9 @@
-﻿#include"../include/MyAPUE.h"
+#include "../include/MyAPUE.h"
 
 
+/**
+ * 不能够正确处理信号的system函数实现
+ */
 int System(const char* cmdstring) {
 	if (cmdstring == NULL)
 		return 1;
@@ -35,11 +38,9 @@ int System(const char* cmdstring) {
 */
 
 
-/*
-* ------------------------------------------------
-*	一个能够正确处理信号的system函数
-* ------------------------------------------------
-*/
+/**
+ * 能够正确处理信号的system函数
+ */
 int mysystem(const char* cmdstring) {
 	struct sigaction ignore_act, oldint_act, oldquit_act;
 	sigset_t newmask, oldmask;
@@ -104,12 +105,16 @@ int mysystem(const char* cmdstring) {
 }
 
 
+/**
+ * abort函数实现
+ */
 void Abort(void) {
 	sigset_t mask;
 	struct sigaction action;
 
 	sigaction(SIGABRT, NULL, &action);
-	if (action.sa_handler == SIG_IGN) {		/*若进程对SIGABRT信号进行忽略，则设置进程对该信号采取默认处理方式*/
+	/*若进程对SIGABRT信号进行忽略，则设置进程对该信号采取默认处理方式*/
+	if (action.sa_handler == SIG_IGN) {		
 		action.sa_handler = SIG_DFL;
 		sigaction(SIGABRT, &action, NULL);
 		//printf("first get here??\n");
@@ -119,7 +124,7 @@ void Abort(void) {
 
 	sigfillset(&mask);
 	sigdelset(&mask, SIGABRT);
-	sigprocmask(SIG_SETMASK, &mask, NULL);	//只接收SIGABRT信号
+	sigprocmask(SIG_SETMASK, &mask, NULL);
 	raise(SIGABRT);
 
 	/*
@@ -127,23 +132,23 @@ void Abort(void) {
 	*	向该进程发送SIGABRT信号会使得其忽略或先调用信号处理程序后返回而进入下面
 	*	的代码片段
 	*/
-	//printf("second get here???\n");
 	fflush(NULL);
 	action.sa_handler = SIG_DFL;
-	sigaction(SIGABRT, &action, NULL);		//对SIGABRT信号采取默认处理方式(终止)
+	sigaction(SIGABRT, &action, NULL);
 	sigprocmask(SIG_SETMASK, &mask, NULL);
 	kill(getpid(), SIGABRT);
 	exit(EXIT_FAILURE);
 }
+
 
 static void sig_alrm(int signo) {
 	//...nothing to do
 }
 
 
-/*
-	实际测试过程中该函数好像会在多线程进程中会使得整个进程进入休眠状态，而不是线程
-*/
+/**
+ * 只能够使整个进行进入休眠的sleep函数实现
+ */
 unsigned int Sleep(unsigned int seconds) {
 	struct sigaction newact, oldact;
 	sigset_t newmask, oldmask, suspend_mask;
@@ -169,7 +174,8 @@ unsigned int Sleep(unsigned int seconds) {
 	alarm(seconds);
 	suspend_mask = oldmask;
 	sigdelset(&suspend_mask, SIGALRM);
-	sigsuspend(&suspend_mask);//原子的修改信号屏蔽字并休眠等待信号
+	//原子的修改信号屏蔽字并休眠等待信号
+	sigsuspend(&suspend_mask);
 	unslept = alarm(0);
 
 	/*
@@ -184,9 +190,7 @@ unsigned int Sleep(unsigned int seconds) {
 Sigfunc* mysignal(int signo, Sigfunc* sighandler) {
 	struct sigaction act, oact;
 
-	/*
-		初始化工作sigaction结构体
-	*/
+	//初始化工作sigaction结构体
 	act.sa_handler = sighandler;
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = 0;

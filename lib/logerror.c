@@ -7,7 +7,7 @@
 
 extern int log_to_stderr;
 
-static 
+static
 void log_doit(int iserror, int error, int priority, const char* fmt, va_list ap) {
 	char  buf[MAX];
 
@@ -31,7 +31,6 @@ void log_open(const char* ident, int option, int facility) {
 		openlog(ident, option, facility);
 }
 
-
 void log_ret(const char* fmt, ...) {
 	va_list ap;
 
@@ -40,7 +39,6 @@ void log_ret(const char* fmt, ...) {
 	va_end(ap);
 }
 
-
 void log_msg(const char* fmt, ...) {
 	va_list ap;
 
@@ -48,7 +46,6 @@ void log_msg(const char* fmt, ...) {
 	log_doit(0, 0, LOG_ERR, fmt, ap);
 	va_end(ap);
 }
-
 
 void log_sys(const char* fmt, ...) {
 	va_list ap;
@@ -59,7 +56,6 @@ void log_sys(const char* fmt, ...) {
 	exit(2);
 }
 
-
 void log_quit(const char* fmt, ...) {
 	va_list ap;
 
@@ -68,7 +64,6 @@ void log_quit(const char* fmt, ...) {
 	va_end(ap);
 	exit(2);
 }
-
 
 void log_exit(int error, const char* fmt, ...) {
 	va_list ap;

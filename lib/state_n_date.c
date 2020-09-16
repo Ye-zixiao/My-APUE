@@ -2,6 +2,7 @@
 #include<string.h>
 //#define _RESUID
 
+
 void pr_exit(int status) {
 	if (WIFEXITED(status))//正常终止
 		printf("normal termination,   exit status   = %d\n",

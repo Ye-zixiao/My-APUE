@@ -27,7 +27,7 @@
 
 
 /**
- * 普通程序出错例程 
+ * 普通程序出错例程
  */
 void err_ret(const char* fmt, ...);
 void err_msg(const char* fmt, ...);
@@ -85,7 +85,7 @@ int System(const char* cmdstring);
 int mysystem(const char* cmdstring);
 void Abort(void);
 unsigned int Sleep(unsigned int seconds);
-Sigfunc* mysignal(int signo, Sigfunc*sighandler);
+Sigfunc* mysignal(int signo, Sigfunc* sighandler);
 
 
 /**
@@ -128,9 +128,7 @@ int clr_fl(int, int);
 int lock_reg(int, int, int, off_t, int, int);
 int lock_test(int, int, int, off_t, int, int);
 
-/**
- * 对文件进行加锁
- */
+//常规记录锁操作
 #define read_lock(fd, offset, whence, len) \
 	lock_reg((fd), F_SETLK, F_RDLCK, (offset), (whence), (len))
 #define readw_lock(fd, offset, whence, len) \
@@ -144,16 +142,12 @@ int lock_test(int, int, int, off_t, int, int);
 
 #define lockfile(fd) write_lock((fd), 0, SEEK_SET, 0)
 
-/**
- * 测试文件记录锁是否被加锁
- */
 //是否可请求读锁
 #define is_read_lockable(fd, offset, whence, len) \
 	(lock_test((fd), F_GETLK, F_RDLCK, (offset), (whence), (len)) == 0)
 //是否可请求写锁
 #define is_write_lockable(fd, offset, whence, len) \
 	(lock_test((fd), F_GETLK, F_WRLCK, (offset), (whence), (len)) == 0)
-
 
 
 #endif // !MY_AUPE_H_

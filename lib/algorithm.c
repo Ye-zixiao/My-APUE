@@ -1,11 +1,13 @@
 /**
- * 注意事项：
+ * 注意： 
  * 1.当需要从小到大的顺序时，将greater传入排序函数
  * 2.当需要从大到小的顺序时，将shorter传入排序函数
  */
-#include"../include/MyAPUE.h"
+#include "../include/MyAPUE.h"
+
 
 typedef int comp(const int*, const int*);
+
 
 static inline
 void swap(int* lhs, int* rhs) {
@@ -13,6 +15,7 @@ void swap(int* lhs, int* rhs) {
 	*lhs = *rhs;
 	*rhs = tmp;
 }
+
 
 
 int greater(const int* lhs, const int* rhs) {
@@ -24,11 +27,10 @@ int shorter(const int* lhs, const int* rhs) {
 }
 
 
-
 /**
  * 暴力排序
  */
-void BFSort(int arr[], int n, comp*pf) {
+void BFSort(int arr[], int n, comp* pf) {
 	for (int i = 0; i < n; ++i) {
 		for (int j = i + 1; j < n; j++)
 			if (pf(&arr[i], &arr[j]) > 0)
@@ -41,7 +43,7 @@ void BFSort(int arr[], int n, comp*pf) {
  * 冒泡排序
  */
 static void bubble(int arr[], int n, comp* pf) {
-	for (int i = 0; i < n-1; ++i) {
+	for (int i = 0; i < n - 1; ++i) {
 		if (pf(&arr[i], &arr[i + 1]) > 0)
 			swap(&arr[i], &arr[i + 1]);
 	}
@@ -52,7 +54,6 @@ void BubbleSort(int arr[], int n, comp* pf) {
 		bubble(arr, i, pf);
 	}
 }
-
 
 
 /**
@@ -117,14 +118,12 @@ static void heapify(int tree[], int n, int i, comp* pf) {
 	}
 }
 
-
 static void build_heap(int arr[], int n, comp* pf) {
 	int last_node = n - 1;
 	for (int i = (last_node - 1) / 2; i >= 0; --i) {
 		heapify(arr, n, i, pf);
 	}
 }
-
 
 void HeapSort(int arr[], int n, comp* pf) {
 	build_heap(arr, n, pf);
@@ -148,7 +147,7 @@ void mergeArr(int arr[], int left, int mid, int right, comp* pf) {
 		larr[i] = arr[left + i];
 	for (int i = 0; i < RSIZE; ++i)
 		rarr[i] = arr[mid + i];
-	
+
 	int i = 0, j = 0, k = 0;
 	while (i < LSIZE && j < RSIZE) {
 		if (pf(&rarr[j], &larr[i]) > 0)
@@ -162,7 +161,7 @@ void mergeArr(int arr[], int left, int mid, int right, comp* pf) {
 		arr[left + k++] = rarr[j++];
 }
 
-static 
+static
 void RecMergeSort(int arr[], int left, int right, comp* pf) {
 	if (left == right)return;
 	int MID = (left + right) / 2;
