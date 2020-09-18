@@ -109,6 +109,7 @@ void HeapSort(int arr[], int n, int(*)(const int*, const int*));
 void BubbleSort(int arr[], int n, int(*)(const int*, const int*));
 void mergeArr(int arr[], int, int, int, int(*)(const int*, const int*));
 void MergeSort(int arr[], int n, int(*)(const int*, const int*));
+void QuitSort(int arr[], int n, int(*)(const int*, const int*));
 
 
 /**

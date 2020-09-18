@@ -178,3 +178,30 @@ void MergeSort(int arr[], int n, comp* pf) {
 /**
  * 快速排序
  */
+static int partition(int arr[], int low, int high, comp* pf) {
+	int i = low, j = high + 1;
+	int key = arr[low];
+
+	while (1) {
+		while (pf(&key, &arr[++i]))
+			if (i == high)break;
+		while (pf(&arr[--j], &key))
+			if (j == low)break;
+		if (i >= j)break;
+		swap(&arr[i], &arr[j]);
+	}
+	swap(&arr[low], &arr[j]);
+	return j;
+}
+
+static void RecQuitSort(int arr[], int low, int high, comp* pf) {
+	if (low >= high)return;
+
+	int key = partition(arr, low, high, pf);
+	RecQuitSort(arr, low, key - 1, pf);
+	RecQuitSort(arr, key + 1, high, pf);
+}
+
+void QuitSort(int arr[], int n, comp* pf) {
+	RecQuitSort(arr, 0, n - 1, pf);
+}
