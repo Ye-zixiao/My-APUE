@@ -163,7 +163,8 @@ void mergeArr(int arr[], int left, int mid, int right, comp* pf) {
 
 static
 void RecMergeSort(int arr[], int left, int right, comp* pf) {
-	if (left == right)return;
+	if (left >= right)return;
+
 	int MID = (left + right) / 2;
 	RecMergeSort(arr, left, MID, pf);
 	RecMergeSort(arr, MID + 1, right, pf);
@@ -185,8 +186,7 @@ static int partition(int arr[], int low, int high, comp* pf) {
 	while (1) {
 		while (pf(&key, &arr[++i]))
 			if (i == high)break;
-		while (pf(&arr[--j], &key))
-			if (j == low)break;
+		while (pf(&arr[--j], &key));
 		if (i >= j)break;
 		swap(&arr[i], &arr[j]);
 	}
@@ -195,11 +195,18 @@ static int partition(int arr[], int low, int high, comp* pf) {
 }
 
 static void RecQuitSort(int arr[], int low, int high, comp* pf) {
-	if (low >= high)return;
+//	if (low >= high)return;
 
-	int key = partition(arr, low, high, pf);
-	RecQuitSort(arr, low, key - 1, pf);
-	RecQuitSort(arr, key + 1, high, pf);
+	if(high - low < 10){
+		RecMergeSort(arr, low, high, pf);
+	}
+	else{
+		int key = partition(arr, low, high, pf);
+	    RecQuitSort(arr, low, key - 1, pf);
+	    RecQuitSort(arr, key + 1, high, pf);
+	}
+//	RecQuitSort(arr, low, key - 1, pf);
+//	RecQuitSort(arr, key + 1, high, pf);
 }
 
 void QuitSort(int arr[], int n, comp* pf) {
