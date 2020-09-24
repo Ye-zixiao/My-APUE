@@ -100,16 +100,18 @@ int makeDetachedThread(void* (*thread_func)(void*), void* args);
 /**
  * 算法例程
  */
-int greater(const int*, const int*);
-int shorter(const int*, const int*);
-void BFSort(int arr[], int n, int(*)(const int*, const int*));
-void SelectSort(int arr[], int n, int(*)(const int*, const int*));
-void InsertionSort(int arr[], int n, int(*)(const int*, const int*));
-void HeapSort(int arr[], int n, int(*)(const int*, const int*));
-void BubbleSort(int arr[], int n, int(*)(const int*, const int*));
-void mergeArr(int arr[], int, int, int, int(*)(const int*, const int*));
-void MergeSort(int arr[], int n, int(*)(const int*, const int*));
-void QuitSort(int arr[], int n, int(*)(const int*, const int*));
+typedef int _Comp(const int*, const int*);
+_Comp greater;
+_Comp shorter;
+void BFSort(int arr[], int n, _Comp* pf);
+void BubbleSort(int arr[], int n, _Comp* pf);
+void SelectSort(int arr[], int n, _Comp* pf);
+void InsertionSort(int arr[], int n, _Comp* pf);
+void ShellSort(int arr[], int n, _Comp* pf);
+void HeapSort(int arr[], int n, _Comp* pf);
+void mergeArr(int arr[], int, int, int, _Comp* pf);
+void MergeSort(int arr[], int n, _Comp* pf);
+void QuitSort(int arr[], int n, _Comp* pf);
 
 
 /**
@@ -143,12 +145,15 @@ int lock_test(int, int, int, off_t, int, int);
 
 #define lockfile(fd) write_lock((fd), 0, SEEK_SET, 0)
 
-//是否可请求读锁
+//是否可设置读锁
 #define is_read_lockable(fd, offset, whence, len) \
 	(lock_test((fd), F_GETLK, F_RDLCK, (offset), (whence), (len)) == 0)
-//是否可请求写锁
+//是否可设置写锁
 #define is_write_lockable(fd, offset, whence, len) \
 	(lock_test((fd), F_GETLK, F_WRLCK, (offset), (whence), (len)) == 0)
+
+ssize_t readn(int fd, void* ptr, size_t nbytes);
+ssize_t writen(int fd, const  void* ptr, size_t nbytes);
 
 
 #endif // !MY_AUPE_H_

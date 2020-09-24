@@ -100,3 +100,43 @@ int clr_fl(int fd, int flags) {
 	val &= ~flags;
 	return fcntl(fd, F_SETFL, val);
 }
+
+
+ssize_t readn(int fd, void* buf, size_t nbytes) {
+	size_t nleft;
+	size_t nread;
+
+	nleft = nbytes;
+	while (nleft > 0) {
+		if ((nread = read(fd, buf, nleft)) < 0) {
+			if (nleft == nbytes)
+				return -1;
+			break;
+		}
+		else if (nread == 0)
+			break;
+		nleft -= nread;
+		buf += nread;
+	}
+	return nbytes - nleft;
+}
+
+
+ssize_t writen(int fd, const void* buf, size_t nbytes) {
+	size_t nleft;
+	size_t nwrite;
+
+	nleft = nbytes;
+	while (nleft > 0) {
+		if ((nwrite = write(fd, buf, nleft)) < 0) {
+			if (nleft == nbytes)
+				return -1;
+			break;
+		}
+		else if (nleft == 0)
+			break;
+		nleft -= nwrite;
+		buf += nwrite;
+	}
+	return nbytes - nleft;
+}
