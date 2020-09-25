@@ -4,7 +4,7 @@ cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
 #-WL,-rpath,../lib -L../lib -lmyapue 的意思是到相对路径../lib中找动态链接库
 
 SRCS:=unblockio.c mandatory.c advisory_lock.c select.c rot13_block.c \
-		rot13_aio.c epoll_test.c
+		rot13_aio.c epoll_test.c mmap_copy.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
