@@ -102,6 +102,9 @@ int clr_fl(int fd, int flags) {
 }
 
 
+/**
+ * 从fd指定的文件中读取指定字节数的到指定缓冲区
+ */
 ssize_t readn(int fd, void* buf, size_t nbytes) {
 	size_t nleft;
 	size_t nread;
@@ -122,6 +125,9 @@ ssize_t readn(int fd, void* buf, size_t nbytes) {
 }
 
 
+/**
+ * 写入指定缓冲区中的指定字节数到fd指向的文件中
+ */
 ssize_t writen(int fd, const void* buf, size_t nbytes) {
 	size_t nleft;
 	size_t nwrite;

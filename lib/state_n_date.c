@@ -1,5 +1,6 @@
-#include"../include/MyAPUE.h"
-#include<string.h>
+#include "../include/MyAPUE.h"
+#include <string.h>
+#include <limits.h>
 //#define _RESUID
 
 
@@ -187,4 +188,30 @@ int pr_mutexattr(const pthread_mutexattr_t* mutexattr) {
 	printf("mutex type   : %s\n", typestr[type > 3 ? 3 : type]);
 
 	return err;
+}
+
+
+/**
+ * 返回最大可打开文件描述符值
+ */
+#ifdef OPEN_MAX
+long openmax = OPEN_MAX;
+#else
+long openmax = 0;
+#endif
+
+#define OPEN_MAX_GUESS 256
+
+long open_max(void) {
+	if (openmax == 0) {
+		errno = 0;
+		if ((openmax = sysconf(_SC_OPEN_MAX)) < 0) {
+			//若OPEN_MAX值无法确定，则errno不改变
+			if (errno == 0)
+				openmax = OPEN_MAX_GUESS;
+			else
+				err_sys("sysconf error for _SC_OPEN_MAX");
+		}
+	}
+	return openmax;
 }

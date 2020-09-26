@@ -1,9 +1,9 @@
-#include"../include/MyAPUE.h"
-#include<fcntl.h>
-#include<sys/resource.h>
-#include<syslog.h>
-#include<sys/stat.h>
-#include<string.h>
+#include "../include/MyAPUE.h"
+#include <fcntl.h>
+#include <sys/resource.h>
+#include <syslog.h>
+#include <sys/stat.h>
+#include <string.h>
 
 #define LOCKMODE FILE_MODE
 

@@ -1,6 +1,6 @@
-#include"../include/MyAPUE.h"
-#include<stdarg.h>
-#include<string.h>
+#include "../include/MyAPUE.h"
+#include <stdarg.h>
+#include <string.h>
 
 #define MAX 200
 

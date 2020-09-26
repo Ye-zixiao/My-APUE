@@ -1,5 +1,5 @@
-#include"../include/MyAPUE.h"
-#include<string.h>
+#include "../include/MyAPUE.h"
+#include <string.h>
 
 void Pthread_create(pthread_t* tid,
 	const pthread_attr_t* attr, void* (*thread_func)(void*), void* args) {

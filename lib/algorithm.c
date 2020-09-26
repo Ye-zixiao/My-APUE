@@ -3,7 +3,7 @@
  * 1.当需要从小到大的顺序时，将greater传入排序函数
  * 2.当需要从大到小的顺序时，将shorter传入排序函数
  */
-#include"../include/MyAPUE.h"
+#include "../include/MyAPUE.h"
 
 
 static inline

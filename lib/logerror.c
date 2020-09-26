@@ -1,7 +1,7 @@
-#include"../include/MyAPUE.h"
-#include<string.h>
-#include<syslog.h>
-#include<stdarg.h>
+#include "../include/MyAPUE.h"
+#include <string.h>
+#include <syslog.h>
+#include <stdarg.h>
 
 #define MAX 256
 

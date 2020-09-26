@@ -65,7 +65,7 @@ int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
 char* mygetenv(const char* name);
 int mygetenv_r(const char* name, char* buf, int buflen);
 char* getenv_r(const char* name);
-
+long open_max(void);
 
 /**
  * 信号传递
@@ -154,6 +154,12 @@ int lock_test(int, int, int, off_t, int, int);
 
 ssize_t readn(int fd, void* ptr, size_t nbytes);
 ssize_t writen(int fd, const  void* ptr, size_t nbytes);
+
+
+//进程间通信
+FILE* Popen(const char* cmdstring, const char* type);
+int Pclose(FILE* pf);
+
 
 
 #endif // !MY_AUPE_H_
