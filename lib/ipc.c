@@ -14,9 +14,6 @@ static int maxfd;
 /**
  * 打开管道，并创建子进程，使用管道连接父进程与子进程，
  * 并返回管道写端/读端文件指针
- * @param	cmdstring	命令字符串
- * @param	type			父进程是读者还是写者
- * @return				指向管道读端/写端的文件指针
  */
 FILE* Popen(const char* cmdstring, const char* type) {
 	int pfds[2];
@@ -65,15 +62,16 @@ FILE* Popen(const char* cmdstring, const char* type) {
 		}
 
 		/**
-		 * 关闭childpid数组中记录的有效文件描述符，子进程不会使用到它们，
-		 * 为了避免在子进程中这些文件描述符被无效的占用，子进程应该将它们
-		 * 进行关闭
+		 * 关闭childpid数组中记录的有效文件描述符。子进程不会使用到它们，
+		 * 为了避免在子进程中这些文件描述符被不良的占用，子进程应该将它们
+		 * 关闭
 		 */
 		for (int i = 0; i < maxfd; ++i)
 			if (childpid[i] > 0)
 				close(i);
 
 		execl("/bin/sh", "sh", "-c", cmdstring, (char*)NULL);
+		//这里执行失败不会导致Popen返回NULL
 		_exit(127);
 	}
 
@@ -97,10 +95,8 @@ FILE* Popen(const char* cmdstring, const char* type) {
 
 
 /**
- * 关闭子进程与父进程之间的管道，也意味着会关闭父进程获得的管道文件指针，
- * 并等待子进程的终止，并获取其终止状态
- * @param	fp	指向管道某端的文件指针
- * @return		子进程的终止状态，或失败返回-1
+ * 关闭子进程与父进程之间的管道，也意味着会关闭父进程获得的管道文件
+ * 指针，并等待子进程的终止，并获取其终止状态
  */
 int Pclose(FILE* fp) {
 	int fd, stat;
@@ -121,10 +117,15 @@ int Pclose(FILE* fp) {
 		return -1;
 	}
 
-	//重置该管道在childpid中的元素值，使之无效
+	//重置childpid
 	childpid[fd] = 0;
 	if (fclose(fp) < 0)
 		return -1;
+
+	/**
+	 * 若waitpid是因信号中断而失败返回，则Pclose失败返回，
+	 * 而errno会被waitpid自动设置为ECHILD
+	 */
 	while (waitpid(pid, &stat, 0) < 0)
 		if (errno != EINTR)
 			return -1;
