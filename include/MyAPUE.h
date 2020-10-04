@@ -27,6 +27,12 @@
 
 
 /**
+ * 自定义调试函数
+ */
+void debug(void);
+
+
+/**
  * 普通程序出错例程
  */
 void err_ret(const char* fmt, ...);
@@ -160,6 +166,10 @@ ssize_t writen(int fd, const  void* ptr, size_t nbytes);
 FILE* Popen(const char* cmdstring, const char* type);
 int Pclose(FILE* pf);
 
-
+typedef int lock_t;
+int SvSemLock_Init(lock_t* lock);
+int SvSemLock_Destroy(lock_t* lock);
+int SvSemLock_Lock(lock_t* lock);
+int SvSemLock_Unlock(lock_t* lock);
 
 #endif // !MY_AUPE_H_

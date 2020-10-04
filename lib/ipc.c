@@ -1,4 +1,7 @@
 #include "../include/MyAPUE.h"
+#include <sys/ipc.h>
+#include <sys/sem.h>
+
 
 /**
  * 该指针指向元素类型为pid_t的数组，其中数组下标记录了父进程打开了哪
@@ -130,4 +133,94 @@ int Pclose(FILE* fp) {
 		if (errno != EINTR)
 			return -1;
 	return stat;
+}
+
+
+
+/** 
+ * 使用System V（XSI）Semaphore实现的二值信号量
+ */
+#define DEFAULT_PERM 0666
+#define DEFAULT_PATH "/tmp"
+#define DEFAULT_PROID 24
+
+union semun {
+	int val;
+	struct semid_ds* buf;
+	unsigned short* array;
+};
+
+
+/**
+ * 创建或引用一个System V信号量，并将其信号值初始化为1
+ */
+int SvSemLock_Init(lock_t* lock) {
+	key_t semkey;
+	union semun arg;
+	struct sembuf sbuf;
+	struct semid_ds sds;
+	const int MAX_TRIES = 10;
+
+	if ((semkey = ftok(DEFAULT_PATH, DEFAULT_PROID)) == -1)
+		return -1;
+	if ((*lock = semget(semkey, 1, IPC_CREAT | IPC_EXCL | DEFAULT_PERM)) != -1) {
+		arg.val = 0;
+		sbuf.sem_num = 0;
+		sbuf.sem_op = 1;
+		sbuf.sem_flg = 0;
+
+		if (semctl(*lock, 0, SETVAL, arg) == -1)
+			return -1;
+		/* semop()的作用就是对System V信号量进行初始化，使得与信号量集相关的
+			semid_ds中的otime不为0，以告诉其他试图对其进行semop的进程该信号量
+			还没完成初始化*/
+		if (semop(*lock, &sbuf, 1) == -1)
+			return -1;
+	}
+	else {
+		if (errno != EEXIST)
+			return -1;
+
+		arg.buf = &sds;
+		if ((*lock = semget(semkey, 0, 0)) == -1)
+			return -1;
+		/* 检测信号量集的初始化状态，使得后续试图对该信号量集进行semop前等待创建进行
+			先对其进行初始化，或者等待10秒后仍然没有被初始化就返回-1*/
+		for (int i = 0; i < MAX_TRIES; ++i) {
+			if (semctl(*lock, 0, IPC_STAT, arg) == -1)
+				return -1;
+			if (arg.buf->sem_otime != 0) {
+				break;
+			}
+			sleep(1);
+		}
+		if (sds.sem_otime == 0)
+			return -1;
+	}
+	return 0;
+}
+
+
+int SvSemLock_Destroy(lock_t* lock) {
+	return semctl(*lock, 0, IPC_RMID) == -1 ? -1 : 0;
+}
+
+
+int SvSemLock_Lock(lock_t* lock) {
+	struct sembuf sbuf;
+
+	sbuf.sem_num = 0;
+	sbuf.sem_op = -1;
+	sbuf.sem_flg = 0;
+	return semop(*lock, &sbuf, 1) == -1 ? -1 : 0;
+}
+
+
+int SvSemLock_Unlock(lock_t* lock) {
+	struct sembuf sbuf;
+
+	sbuf.sem_num = 0;
+	sbuf.sem_op = 1;
+	sbuf.sem_flg = 0;
+	return semop(*lock, &sbuf, 1) == -1 ? -1 : 0;
 }

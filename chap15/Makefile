@@ -5,7 +5,7 @@ cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
 
 SRCS:=simple_pipe.c pager.c pipe_tellwait.c popen_pager.c mypager.c \
 		myuclc.c myuclc_reader.c history.c add2.c add2_driver.c \
-		add2_.c msg_client.c msg_server.c
+		add2_.c svmsg_client.c svmsg_server.c sv_bsem.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
