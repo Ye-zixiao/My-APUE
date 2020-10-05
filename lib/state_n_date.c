@@ -90,6 +90,24 @@ void pr_now(void) {//打印当前时间
 }
 
 
+#define TIMESTRLEN 32
+
+/**
+ * 非线程安全地获取当前的时间
+ */
+const char *currTime(void) {
+	static char buf[TIMESTRLEN];
+	struct timeval timevalbuf;
+	struct tm* ptm;
+
+	gettimeofday(&timevalbuf, NULL);
+	if ((ptm = localtime(&timevalbuf.tv_sec)) == NULL)
+		return NULL;
+	strftime(buf, TIMESTRLEN, "%H:%M:%S", ptm);
+	return buf;
+}
+
+
 /*
 	用来帮助pthread_cond_timewait这样的函数生成绝对的定时时间
 */

@@ -62,6 +62,7 @@ void pr_mask(const char* str);
 void pr_exit(int status);
 void pr_resuid(void);
 void pr_now(void);
+const char* currTime(void);
 void _pr_limit(const char* rname, int resource);
 void get_abstime(struct timespec* tsp, long seconds);
 int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
