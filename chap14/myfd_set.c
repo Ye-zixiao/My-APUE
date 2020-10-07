@@ -17,6 +17,10 @@ typedef struct {
 } myfd_set;
 
 
+/* 
+ * 这里我将指向文件描述符集的指针放在了第一个参数，
+ * 第二个参数才是需要设置的文件描述符
+ * */
 #define MYFD_ZERO(set) \
 	for(int i = 0; i < MYFDSETSIZE / __NMYFDBITS; ++i) \
 		__FD_BITS((set))[i] = 0;

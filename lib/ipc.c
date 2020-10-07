@@ -140,7 +140,7 @@ int Pclose(FILE* fp) {
 /** 
  * 使用System V（XSI）Semaphore实现的二值信号量
  */
-#define DEFAULT_PERM 0666
+#define DEFAULT_PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
 #define DEFAULT_PATH "/tmp"
 #define DEFAULT_PROID 24
 
@@ -152,7 +152,10 @@ union semun {
 
 
 /**
- * 创建或引用一个System V信号量，并将其信号值初始化为1
+ * 创建或引用一个System V信号量，并将其信号值初始化为1。在该函数中
+ * 引入如此多的预防机制的主要目的是：为了避免多个进程初始化二值信号
+ * 量时只保证第一个进程能够初始化这个信号量，但所有的进程都能够成功
+ * 返回
  */
 int SvSemLock_Init(lock_t* lock) {
 	key_t semkey;
@@ -172,8 +175,7 @@ int SvSemLock_Init(lock_t* lock) {
 		if (semctl(*lock, 0, SETVAL, arg) == -1)
 			return -1;
 		/* semop()的作用就是对System V信号量进行初始化，使得与信号量集相关的
-			semid_ds中的otime不为0，以告诉其他试图对其进行semop的进程该信号量
-			还没完成初始化*/
+			semid_ds中的otime不为0，若为0则表示还没有初始化完毕 */
 		if (semop(*lock, &sbuf, 1) == -1)
 			return -1;
 	}
@@ -184,8 +186,9 @@ int SvSemLock_Init(lock_t* lock) {
 		arg.buf = &sds;
 		if ((*lock = semget(semkey, 0, 0)) == -1)
 			return -1;
-		/* 检测信号量集的初始化状态，使得后续试图对该信号量集进行semop前等待创建进行
-			先对其进行初始化，或者等待10秒后仍然没有被初始化就返回-1*/
+		/* 检测信号量集的初始化状态，让当前进程等那个负责初始化的进程完成二值信号
+			量初始化后才成功返回，以免进程之间针对信号量发生竞态条件，若等待超时则
+			错误返回 */
 		for (int i = 0; i < MAX_TRIES; ++i) {
 			if (semctl(*lock, 0, IPC_STAT, arg) == -1)
 				return -1;

@@ -8,7 +8,7 @@
 
 void rwPStat(const char* target, const char* stat) {
 	printf("%12s proccess(%lx) %5s, %s\n",
-		target, (long)getpid(), stat, currTime());
+		target, (long)getpid(), stat, currTime(NULL));
 }
 
 int main(void)

@@ -13,11 +13,7 @@ static void sleep_us(usec_t us) {
 	struct timeval tval;
 	
 	tval.tv_usec = us % SEC2US;
-	if (us >= SEC2US)
-		tval.tv_sec = us / SEC2US;
-	else
-		tval.tv_sec = 0L;
-
+	tval.tv_sec = us / SEC2US;
 	select(1, NULL, NULL, NULL, &tval);
 }
 
@@ -29,8 +25,8 @@ int main(int argc, char* argv[])
 		err_quit("usage: %s <useconds>", argv[0]);
 
 	us = (usec_t)atol(argv[1]);
-	printf("time: %s\n", currTime());
+	printf("time: %s\n", currTime(NULL));
 	sleep_us(us);
-	printf("time: %s\n", currTime());
+	printf("time: %s\n", currTime(NULL));
 	exit(EXIT_SUCCESS);
 }

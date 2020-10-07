@@ -16,11 +16,7 @@ static void sleep_us(usec_t us) {
 	struct timespec timesp;
 
 	timesp.tv_nsec = us % SEC2USEC * USEC2NSEC;
-	if (us >= SEC2USEC)
-		timesp.tv_sec = us / SEC2USEC;
-	else
-		timesp.tv_sec = 0;
-
+	timesp.tv_sec = us / SEC2USEC;
 	ppoll(NULL, 0, &timesp, NULL);
 }
 
@@ -33,8 +29,8 @@ int main(int argc, char* argv[])
 		err_quit("usage: %s <useconds>", argv[0]);
 
 	us = (usec_t)atol(argv[1]);
-	printf("time: %s\n", currTime());
+	printf("time: %s\n", currTime(NULL));
 	sleep_us(us);
-	printf("time: %s\n", currTime());
+	printf("time: %s\n", currTime(NULL));
 	exit(EXIT_SUCCESS);
 }

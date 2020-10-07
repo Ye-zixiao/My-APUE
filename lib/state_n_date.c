@@ -3,6 +3,8 @@
 #include <limits.h>
 //#define _RESUID
 
+#define TIMESTRLEN 64
+
 
 void pr_exit(int status) {
 	if (WIFEXITED(status))//正常终止
@@ -26,7 +28,7 @@ void _pr_limit(const char* rname, int resource) {
 	struct rlimit limitbuf;
 
 	if (getrlimit(resource, &limitbuf) != 0)
-		err_sys("getrlimit error\n");
+		err_sys("getrlimit error");
 	printf("%s\n", rname);
 	if (limitbuf.rlim_cur == RLIM_INFINITY)
 		printf("soft limit: unlimited\n");
@@ -43,7 +45,7 @@ void _pr_limit(const char* rname, int resource) {
 void print_resuid(void) {
 	uid_t ruid, euid, suid;
 	if (getresuid(&ruid, &euid, &suid) == -1)
-		err_sys("getresuid error\n");
+		err_sys("getresuid error");
 	printf("ruid: %d, euid: %d, suid: %d\n",
 		ruid, euid, suid);
 }
@@ -75,27 +77,10 @@ void pr_mask(const char* str) {
 }
 
 
-void pr_now(void) {//打印当前时间
-	const int BufSize = 64;
-	struct timeval timevalbuf;
-	struct tm* ptm;
-	char buf[BufSize];
-
-	gettimeofday(&timevalbuf, NULL);
-	if ((ptm = localtime(&timevalbuf.tv_sec)) == NULL)
-		err_sys("localtime error\n");
-	if (strftime(buf, BufSize, "%Y-%m-%d %H:%M:%S", ptm) == 0)
-		err_sys("strftime error\n");
-	printf("Current time is %s\n", buf);
-}
-
-
-#define TIMESTRLEN 32
-
 /**
  * 非线程安全地获取当前的时间
  */
-const char *currTime(void) {
+const char *currTime(const char*format) {
 	static char buf[TIMESTRLEN];
 	struct timeval timevalbuf;
 	struct tm* ptm;
@@ -103,9 +88,30 @@ const char *currTime(void) {
 	gettimeofday(&timevalbuf, NULL);
 	if ((ptm = localtime(&timevalbuf.tv_sec)) == NULL)
 		return NULL;
-	strftime(buf, TIMESTRLEN, "%H:%M:%S", ptm);
+	if (format == NULL)
+		strftime(buf, TIMESTRLEN, "%H:%M:%S", ptm);
+	else
+		strftime(buf, TIMESTRLEN, format, ptm);
 	return buf;
 }
+
+
+/**
+ * 非线程安全地将给定time_t值变换为格式化时间
+ */
+const char* transformTime(time_t t,const char*format) {
+	static char buf[TIMESTRLEN];
+	struct tm* ptm;
+
+	if ((ptm = localtime(&t)) == NULL)
+		return NULL;
+	if (format == NULL)
+		strftime(buf, TIMESTRLEN, "%c", ptm);
+	else
+		strftime(buf, TIMESTRLEN, format, ptm);
+	return buf;
+}
+
 
 
 /*

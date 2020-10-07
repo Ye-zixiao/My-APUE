@@ -41,6 +41,8 @@ int main(int argc, char* argv[])
 		if ((dest = mmap(0, copysize, PROT_WRITE | PROT_READ, MAP_SHARED, ofd, fsz))
 			== MAP_FAILED)
 			err_sys("mmap error for output");
+		
+		//close(ifd);
 #ifdef DEBUG
 		printf("dest = %p, dest mod PAGESIZE = %ld\n", dest, (long)dest % getpagesize());
 #endif

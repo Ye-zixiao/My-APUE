@@ -5,7 +5,7 @@ cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
 
 SRCS:=unblockio.c mandatory.c advisory_lock.c select.c rot13_block.c \
 		rot13_aio.c epoll_test.c mmap_copy.c hungry_lock.c myfd_set.c \
-		ppoll_usleep.c select_usleep.c
+		ppoll_usleep.c select_usleep.c pipe_capacity.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 

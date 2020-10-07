@@ -61,12 +61,14 @@ void log_exit(int error, const char* fmt, ...);
 void pr_mask(const char* str);
 void pr_exit(int status);
 void pr_resuid(void);
-void pr_now(void);
-const char* currTime(void);
+const char* currTime(const char*format);
+const char* transformTime(time_t t, const char* format);
 void _pr_limit(const char* rname, int resource);
 void get_abstime(struct timespec* tsp, long seconds);
 int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
 
+#define pr_now() \
+	printf("Current time: %s\n",currTime(NULL));
 #define pr_limit(resource) _pr_limit(#resource,resource)
 
 char* mygetenv(const char* name);
