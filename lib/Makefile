@@ -2,7 +2,7 @@ CC=gcc
 cflags=-fPIC -lpthread
 
 SRCS:=myerror.c proc.c state_n_date.c waittell.c Pthread.c \
-		algorithm.c daemon.c AdvancedIO.c ipc.c
+		algorithm.c daemon.c AdvancedIO.c ipc.c binary_sems.c
 OBJS:=${SRCS:c=o}
 
 all:${OBJS}

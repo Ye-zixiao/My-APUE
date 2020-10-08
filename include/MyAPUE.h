@@ -68,7 +68,7 @@ void get_abstime(struct timespec* tsp, long seconds);
 int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
 
 #define pr_now() \
-	printf("Current time: %s\n",currTime(NULL));
+	printf("Current time: %s\n",currTime(NULL))
 #define pr_limit(resource) _pr_limit(#resource,resource)
 
 char* mygetenv(const char* name);
@@ -170,9 +170,11 @@ FILE* Popen(const char* cmdstring, const char* type);
 int Pclose(FILE* pf);
 
 typedef int lock_t;
-int SvSemLock_Init(lock_t* lock);
-int SvSemLock_Destroy(lock_t* lock);
-int SvSemLock_Lock(lock_t* lock);
-int SvSemLock_Unlock(lock_t* lock);
+int BSem_Create(lock_t* lock, const char* path, int projid);
+int BSem_Destroy(lock_t* lock);
+int BSem_Init(lock_t* lock, int initv);
+int BSem_Sub(lock_t* lock);
+int BSem_Add(lock_t* lock);
+
 
 #endif // !MY_AUPE_H_

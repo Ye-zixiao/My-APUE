@@ -15,7 +15,7 @@ static void pro_do(struct SharedVal*psv) {
 	char buf[BUFSIZE];
 
 	for (int i = 0; i < DEFAULT_CNT; ++i) {
-		if (SvSemLock_Lock(&psv->lock) == -1)
+		if (BSem_Sub(&psv->lock) == -1)
 			err_sys("lock error");
 		
 		strcpy(buf, psv->pmm);
@@ -23,7 +23,7 @@ static void pro_do(struct SharedVal*psv) {
 		sprintf(buf, "%d\n", ++temp);
 		strcpy(psv->pmm, buf);
 
-		if (SvSemLock_Unlock(&psv->lock) == -1)
+		if (BSem_Add(&psv->lock) == -1)
 			err_sys("unlock error");
 	}
 }
@@ -46,7 +46,9 @@ int main(int argc, char* argv[])
 		err_sys("write error");
 
 	//初始化System V二值信号量
-	if (SvSemLock_Init(&svalue.lock) == -1)
+	if (BSem_Create(&svalue.lock,NULL,-1) == -1)
+		err_sys("lock create error");
+	if (BSem_Init(&svalue.lock, 1) == -1)
 		err_sys("lock init error");
 	if ((svalue.pmm = mmap(0, BUFSIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0))
 		== MAP_FAILED)
@@ -68,7 +70,7 @@ int main(int argc, char* argv[])
 			err_sys("msync error");
 		if (munmap(svalue.pmm, BUFSIZE) == -1)
 			err_sys("munmap error");
-		if (SvSemLock_Destroy(&svalue.lock) == -1)
+		if (BSem_Destroy(&svalue.lock) == -1)
 			err_sys("lock destroy error");
 	}
 	
