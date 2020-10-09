@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <time.h>
 #include <pthread.h>
+#include <semaphore.h>
 
 #define BUFSIZE 4096
 #define SBUFSIZE 64
@@ -165,7 +166,9 @@ ssize_t readn(int fd, void* ptr, size_t nbytes);
 ssize_t writen(int fd, const  void* ptr, size_t nbytes);
 
 
-//进程间通信
+/**
+ * 进程间通信
+ */
 FILE* Popen(const char* cmdstring, const char* type);
 int Pclose(FILE* pf);
 
@@ -176,5 +179,17 @@ int BSem_Init(lock_t* lock, int initv);
 int BSem_Sub(lock_t* lock);
 int BSem_Add(lock_t* lock);
 
+#define PBSem_Init(lock, pshared)		\
+	sem_init((lock), (pshared), 1)
+#define PBSem_Destroy(lock)		\
+	sem_destroy(lock)
+#define PBSem_Lock(lock)		\
+	sem_wait(lock)
+#define PBSem_Trylock(lock)		\
+	sem_trywait(lock)
+#define PBSem_Timedwait(lock, tsptr)		\
+	sem_timedwait((lock), (tsptr))
+#define PBSem_Unlock(lock)		\
+	sem_post((lock))
 
 #endif // !MY_AUPE_H_
