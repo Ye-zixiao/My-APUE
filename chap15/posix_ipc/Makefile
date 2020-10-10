@@ -2,7 +2,7 @@ CC:=gcc
 cflags:=-Wall -lapue -Wl,-rpath,../../lib -L../../lib -lmyapue -lpthread \
 		-lbsd -lrt -O  #-Werror
 
-SRCS:=plock.c mkmq.c rmmq.c mq_getattr.c mq_setattr.c
+SRCS:=plock.c mkmq.c rmmq.c mqstat.c chmq.c pmq_server.c pmq_client.c
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 

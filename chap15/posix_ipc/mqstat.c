@@ -17,8 +17,6 @@ int main(int argc, char* argv[])
 	printf("Maximum # of messages on mqueue :   %ld\n", attr.mq_maxmsg);
 	printf("Maximum message size            :   %ld\n", attr.mq_msgsize);
 	printf("# of messages currently on queue:   %ld\n", attr.mq_curmsgs);
-	printf("Message queue type              :   %s\n",
-						(attr.mq_flags & O_NONBLOCK) == 0 ? "None" : "Nonblock");
 	
 	exit(EXIT_SUCCESS);
 }
