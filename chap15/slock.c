@@ -36,6 +36,7 @@ struct slock* s_alloc(void) {
 	return sp;
 }
 
+
 /**
  * 释放信号量相关的资源
  */
