@@ -1,19 +1,17 @@
-CC=gcc
-cflags=-fPIC -lpthread
+CC= gcc
+CFLAGS= -fPIC -lpthread
+SRCS:= $(wildcard *.c)
+OBJS:= $(SRCS:c=o)
 
-SRCS:=myerror.c proc.c state_n_date.c waittell.c Pthread.c \
-		algorithm.c daemon.c AdvancedIO.c ipc.c binary_sems.c
-OBJS:=${SRCS:c=o}
-
-all:${OBJS}
-	${CC} -shared $(cflags) ${OBJS} -o libmyapue.so
+all:$(OBJS)
+	$(CC) -shared $(CFLAGS) $(OBJS) -o libmyapue.so
 
 %.o:%.c Makefile
-	${CC} $(cflags) -c $<
+	$(CC) $(CFLAGS) -c $<
 
 .PHONY:
-clean:
-	rm -f ${OBJS} libmyapue.so
+clean: rmobj
+	rm libmyapue.so
 
 rmobj:
-	rm -f ${OBJS} 
+	rm *.o 

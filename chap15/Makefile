@@ -1,29 +1,23 @@
-CC:=gcc
-cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
-		-lbsd -lrt -O  #-Werror
-#-WL,-rpath,../lib -L../lib -lmyapue 的意思是到相对路径../lib中找动态链接库
+CC:= gcc
+DPATH:= -lpthread -lbsd -lrt -lapue -Wl,-rpath,../lib -L../lib -lmyapue
+CFLAGS:= -Wall -O
+SRCS:= $(wildcard *.c)
+OBJS:= $(SRCS:c=o)
+PRGS:= $(SRCS:.c=)
 
-SRCS:=simple_pipe.c pager.c pipe_tellwait.c popen_pager.c mypager.c \
-		myuclc.c myuclc_reader.c history.c add2.c add2_driver.c \
-		add2_.c svmsg_client.c svmsg_server.c sv_bsem.c svsem_stat.c \
-		shm_alloc.c devzero.c anon_mmap.c shmzero.c plock.c
-OBJS:=${SRCS:c=o}
-PROGS:=${SRCS:.c=}
+.PHONY: all
+all: $(PRGS)
 
-.PHONY:
-all:${PROGS}
+#每一个可执行文件%的生成都依赖于其同名绝对目标文件%.o
+$(PRGS):%:%.o
+	$(CC) $(CFLAGS) $(DPATH) $< -o $@
 
-${PROGS}:%:%.o Makefile
-	${CC} $< -o $@ $(cflags)
+#每一个绝对目标文件%.o的生成都依赖于其同名源文件%.c
+$(OBJS):%.o:%.c
+	$(CC) $(CFLAGS) $(DPATH) -c $<
 
-clean:
-	rm -f ${PROGS} ${OBJS}
-
-rmprg:
-	rm -f ${PROGS}
-
-rmobj:
-	rm -f $(OBJS)
-
-%.o:%.c Makefile
-	${CC} ${cflags} -c $<
+clean: rmobjs
+	rm $(PRGS)
+	
+rmobjs:
+	rm *.o

@@ -1,29 +1,21 @@
-CC:=gcc
-cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
-		-lbsd -O  #-Werror
-#-WL,-rpath,../lib -L../lib -lmyapue 的意思是到相对路径../lib中找动态链接库
+CC:= gcc
+DPATH:= -lpthread -lbsd -lrt -lapue -Wl,-rpath,../lib -L../lib -lmyapue
+CFLAGS:= -Wall -O
+SRCS:= $(wildcard *.c)
+OBJS:= $(SRCS:c=o)
+PRGS:= $(SRCS:.c=)
 
-SRCS:=thread_id.c pthread_exit.c thread_errno.c max.c thread_localreturn.c \
-		pthread_cancel.c pthread_cleanup.c mutex_struct.c mutex_trylock.c \
-		foo1.c foo2.c foo3.c mutex_timelock.c rwjobqueue.c pthread_cond.c \
-		spinlock.c pthread_barrier.c prac1.c mybarrier.c
-OBJS:=${SRCS:c=o}
-PROGS:=${SRCS:.c=}
+.PHONY: all
+all: $(PRGS)
 
-.PHONY:
-all:${PROGS}
+$(PRGS):%:%.o
+	$(CC) $(CFLAGS) $(DPATH) $< -o $@
 
-${PROGS}:%:%.o Makefile
-	${CC} $< -o $@ $(cflags)
+$(OBJS):%.o:%.c
+	$(CC) $(CFLAGS) $(DPATH) -c $<
 
-clean:
-	rm -f ${PROGS} ${OBJS}
-
-rmprg:
-	rm -f ${PROGS}
-
-rmobj:
-	rm -f $(OBJS)
-
-%.o:%.c Makefile
-	${CC} ${cflags} -c $<
+clean: rmobjs
+	rm $(PRGS)
+	
+rmobjs:
+	rm *.o

@@ -189,6 +189,11 @@ void settimer(unsigned second, void(*pf)(void)) {
 	} }
 
 
+void pr_Now(void){
+	pr_now();		
+}
+
+
 /*
 * ----------------------main function--------------------------
 */
@@ -201,11 +206,11 @@ int main(void)
 	pr_now();
 	printf("begin(enter ^\\ to quit!):\n");
 	printf("settimer: 8 5 7 2 4 -> 2 2 1 2 1\n");
-	settimer(8, pr_now);
-	settimer(5, pr_now);
-	settimer(7, pr_now);
-	settimer(2, pr_now);
-	settimer(4, pr_now);
+	settimer(8, pr_Now);
+	settimer(5, pr_Now);
+	settimer(7, pr_Now);
+	settimer(2, pr_Now);
+	settimer(4, pr_Now);
 #ifdef DEBUG
 	travel();
 #endif // DEBUG
