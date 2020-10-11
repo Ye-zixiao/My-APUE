@@ -1,24 +1,21 @@
-CC:=gcc
-cflags:=-Wall -lapue -Wl,-rpath,../lib -L../lib -lmyapue -lpthread \
-		-lbsd -lrt -O  #-Werror
-SRCS:=
-OBJS:=${SRCS:c=o}
-PROGS:=${SRCS:.c=}
+CC:= gcc
+DPATH:= -lpthread -lbsd -lrt -lapue -Wl,-rpath,../lib -L../lib -lmyapue
+CFLAGS:= -Wall -O
+SRCS:= $(wildcard *.c)
+OBJS:= $(SRCS:c=o)
+PRGS:= $(SRCS:.c=)
 
-.PHONY:
-all:${PROGS}
+.PHONY: all
+all: $(PRGS)
 
-${PROGS}:%:%.o Makefile
-	${CC} $< -o $@ $(cflags)
+$(PRGS):%:%.o
+	$(CC) $(CFLAGS) $(DPATH) $< -o $@
 
-clean:
-	rm -f ${PROGS} ${OBJS}
+$(OBJS):%.o:%.c
+	$(CC) $(CFLAGS) $(DPATH) -c $<
 
-rmprg:
-	rm -f ${PROGS}
-
-rmobj:
-	rm -f $(OBJS)
-
-%.o:%.c Makefile
-	${CC} ${cflags} -c $<
+clean: rmobjs
+	rm $(PRGS)
+	
+rmobjs:
+	rm *.o
