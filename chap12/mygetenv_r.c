@@ -20,7 +20,7 @@ void* thread_func(void* args) {
 
 int main(int argc, char* argv[]) {
 	if (argc < 2)
-		err_sys("usage: find <NAME...>\n");
+		err_sys("usage: find <NAME...>");
 
 	for (int i = 1; i < argc; ++i)
 		makeDetachedThread(thread_func, (void*)argv[i]);
