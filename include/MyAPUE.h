@@ -19,6 +19,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <sys/socket.h>
 
 #define BUFSIZE 4096
 #define SBUFSIZE 64
@@ -138,20 +139,21 @@ int set_fd(int, int);
 int set_fl(int, int);
 int clr_fd(int, int);
 int clr_fl(int, int);
+int set_cloexec(int fd);
 int lock_reg(int, int, int, off_t, int, int);
 int lock_test(int, int, int, off_t, int, int);
 
 //常规记录锁操作
 #define read_lock(fd, offset, whence, len) \
-	lock_reg((fd), F_SETLK, F_RDLCK, (offset), (whence), (len))
+		lock_reg((fd), F_SETLK, F_RDLCK, (offset), (whence), (len))
 #define readw_lock(fd, offset, whence, len) \
-	lock_reg((fd), F_SETLKW, F_RDLCK, (offset), (whence), (len))
+		lock_reg((fd), F_SETLKW, F_RDLCK, (offset), (whence), (len))
 #define write_lock(fd, offset, whence, len) \
-	lock_reg((fd), F_SETLK, F_WRLCK, (offset), (whence), (len))
+		lock_reg((fd), F_SETLK, F_WRLCK, (offset), (whence), (len))
 #define writew_lock(fd, offset, whence, len) \
-	lock_reg((fd), F_SETLKW, F_WRLCK, (offset), (whence), (len))
+		lock_reg((fd), F_SETLKW, F_WRLCK, (offset), (whence), (len))
 #define un_lock(fd, offset, whence, len) \
-	lock_reg((fd), F_SETLK, F_UNLCK, (offset), (whence), (len))
+		lock_reg((fd), F_SETLK, F_UNLCK, (offset), (whence), (len))
 
 #define lockfile(fd) write_lock((fd), 0, SEEK_SET, 0)
 
@@ -179,17 +181,27 @@ int BSem_Init(lock_t* lock, int initv);
 int BSem_Sub(lock_t* lock);
 int BSem_Add(lock_t* lock);
 
-#define PBSem_Init(lock, pshared)		\
-	sem_init((lock), (pshared), 1)
-#define PBSem_Destroy(lock)		\
-	sem_destroy(lock)
-#define PBSem_Lock(lock)		\
-	sem_wait(lock)
-#define PBSem_Trylock(lock)		\
-	sem_trywait(lock)
-#define PBSem_Timedwait(lock, tsptr)		\
-	sem_timedwait((lock), (tsptr))
-#define PBSem_Unlock(lock)		\
-	sem_post((lock))
+//使用POSIX信号量封装出的二值信号量
+#define PBSem_Init(lock, pshared) \
+		sem_init((lock), (pshared), 1)
+#define PBSem_Destroy(lock) \
+		sem_destroy(lock)
+#define PBSem_Lock(lock)	 \
+		sem_wait(lock)
+#define PBSem_Trylock(lock) \
+		sem_trywait(lock)
+#define PBSem_Timedwait(lock, tsptr)	 \
+		sem_timedwait((lock), (tsptr))
+#define PBSem_Unlock(lock) \
+		sem_post((lock))
+
+
+/**
+ * socket编程
+ */
+int connect_retry(int domain, int type, int protocol,
+				const struct sockaddr* addr, socklen_t alen);
+int init_server(int type, const struct sockaddr* addr,
+				socklen_t alen, int qlen);
 
 #endif // !MY_AUPE_H_

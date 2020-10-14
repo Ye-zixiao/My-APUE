@@ -10,12 +10,13 @@ all: $(PRGS)
 
 $(PRGS):%:%.o
 	$(CC) $(CFLAGS) $(DPATH) $< -o $@
+	-rm $<
 
 $(OBJS):%.o:%.c
 	$(CC) $(CFLAGS) $(DPATH) -c $<
 
 clean: rmobjs
-	rm $(PRGS)
+	-rm $(PRGS)
 	
 rmobjs:
-	rm *.o
+	-rm *.o

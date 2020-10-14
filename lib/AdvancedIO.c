@@ -90,6 +90,20 @@ int set_fl(int fd, int flags) {
 
 
 /**
+ * 设置文件描述符标志FD_CLOEXEC，使子进程在fork之后自动关闭从
+ * 父进程中复制过来的文件描述符
+ */
+int set_cloexec(int fd) {
+	int val;
+
+	if ((val = fcntl(fd, F_GETFD, 0)) < 0)
+		return -1;
+	val |= FD_CLOEXEC;
+	return fcntl(fd, F_SETFD, val);
+}
+
+
+/**
  * 清除一个文件描述符指向的文件表项中的一个或多个文件状态标志
  */
 int clr_fl(int fd, int flags) {

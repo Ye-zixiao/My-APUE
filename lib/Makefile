@@ -5,13 +5,14 @@ OBJS:= $(SRCS:c=o)
 
 all:$(OBJS)
 	$(CC) -shared $(CFLAGS) $(OBJS) -o libmyapue.so
+	-rm $(OBJS)
 
 %.o:%.c Makefile
 	$(CC) $(CFLAGS) -c $<
 
 .PHONY:
 clean: rmobj
-	rm libmyapue.so
+	-rm libmyapue.so
 
 rmobj:
-	rm *.o 
+	-rm *.o 
