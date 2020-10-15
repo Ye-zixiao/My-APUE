@@ -8,8 +8,6 @@
 ##### 2.实验平台
 
 ```sh
-     yexinhai@Localhost
-     ------------------
      OS: Manjaro Linux x86_64
      Host: HP ENVY Notebook
                Kernel: 5.8.11-1-MANJARO
