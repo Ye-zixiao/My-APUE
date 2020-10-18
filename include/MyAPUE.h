@@ -20,6 +20,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <sys/socket.h>
+#include <stddef.h>
 
 #define BUFSIZE 4096
 #define SBUFSIZE 64
@@ -203,5 +204,10 @@ int connect_retry(int domain, int type, int protocol,
 				const struct sockaddr* addr, socklen_t alen);
 int init_server(int type, const struct sockaddr* addr,
 				socklen_t alen, int qlen);
+
+int serv_listen(const char* name);
+int serv_accept(int listenfd, uid_t* uidptr);
+int client_conn(const char* name);
+
 
 #endif // !MY_AUPE_H_

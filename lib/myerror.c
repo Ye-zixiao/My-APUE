@@ -80,3 +80,8 @@ void err_quit(const char* fmt, ...) {
 	va_end(ap);
 	exit(EXIT_FAILURE);
 }
+
+void debug(void) {
+	static int cnt = 0;
+	printf("get here(%d)\n", cnt++);
+}
