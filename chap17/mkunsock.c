@@ -13,6 +13,7 @@ int main(int argc, char* argv[])
 	if (argc != 2)
 		err_quit("usage: mkunsock <unix-sock-name>");
 
+	//umask(S_IRWXG | S_IRWXO);
 	unaddr.sun_family = AF_UNIX;
 	strcpy(unaddr.sun_path, argv[1]);
 	size = offsetof(struct sockaddr_un, sun_path) + strlen(unaddr.sun_path);

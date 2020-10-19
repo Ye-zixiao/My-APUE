@@ -1,6 +1,7 @@
 #include "../include/MyAPUE.h"
 #include <string.h>
 #include <limits.h>
+#include <pwd.h>
 //#define _RESUID
 
 #define TIMESTRLEN 64
@@ -122,6 +123,15 @@ void get_abstime(struct timespec* tsp, long seconds) {
 		err_sys("clock_gettime error\n");
 	tsp->tv_sec += seconds;
 }
+
+
+const char* getusername(uid_t uid) {
+	struct passwd* ppwd;
+
+	return ((ppwd = getpwuid(uid)) != NULL) ?
+		ppwd->pw_name : NULL;
+}
+
 
 
 /*

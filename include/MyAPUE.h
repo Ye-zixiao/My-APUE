@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <errno.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/time.h>
 #include <sys/resource.h>
@@ -66,8 +67,8 @@ void pr_exit(int status);
 void pr_resuid(void);
 const char* currTime(const char*format);
 const char* transformTime(time_t t, const char* format);
-void _pr_limit(const char* rname, int resource);
 void get_abstime(struct timespec* tsp, long seconds);
+void _pr_limit(const char* rname, int resource);
 int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
 
 #define pr_now() \
@@ -78,6 +79,8 @@ char* mygetenv(const char* name);
 int mygetenv_r(const char* name, char* buf, int buflen);
 char* getenv_r(const char* name);
 long open_max(void);
+
+const char* getusername(uid_t uid);
 
 /**
  * 信号传递
@@ -207,7 +210,17 @@ int init_server(int type, const struct sockaddr* addr,
 
 int serv_listen(const char* name);
 int serv_accept(int listenfd, uid_t* uidptr);
-int client_conn(const char* name);
+int cli_conn(const char* name);
 
+//提供类似于server_listen类似的功能但是可以支持backlog选项
+int server_listen(const char* name, int qlen);
+
+
+/**
+ * 传送文件描述符
+ */
+int send_fd(int sockfd, int fd_to_send);
+int send_err(int sockfd, int status, const char* errmsg);
+int recv_fd(int sockfd, ssize_t(*userfunc)(int, const void*, size_t));
 
 #endif // !MY_AUPE_H_

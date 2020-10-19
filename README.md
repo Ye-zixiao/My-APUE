@@ -8,9 +8,9 @@
 ##### 2.实验平台
 
 ```sh
-     OS: Manjaro Linux x86_64
-     Host: HP ENVY Notebook
-               Kernel: 5.8.11-1-MANJARO
+       OS: Manjaro Linux x86_64
+       Host: HP ENVY Notebook
+       Kernel: 5.8.11-1-MANJARO
        Uptime: 6 hours, 27 mins
        Packages: 1204 (pacman)
        Shell: zsh 5.8

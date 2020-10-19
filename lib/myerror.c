@@ -8,7 +8,7 @@ static
 void err_doit(int iserror, int error, const char* fmt, va_list ap) {
 	char buf[MAX];
 
-	//暂时先换存在一个字符数组中
+	//暂时先缓存在一个字符数组中
 	vsnprintf(buf, MAX - 1, fmt, ap);
 	if (iserror)
 		snprintf(buf + strlen(buf), MAX - strlen(buf) - 1,
@@ -83,5 +83,6 @@ void err_quit(const char* fmt, ...) {
 
 void debug(void) {
 	static int cnt = 0;
+
 	printf("get here(%d)\n", cnt++);
 }
