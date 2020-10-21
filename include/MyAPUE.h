@@ -215,6 +215,8 @@ int cli_conn(const char* name);
 //提供类似于server_listen类似的功能但是可以支持backlog选项
 int server_listen(const char* name, int qlen);
 
+#define fd_pipe(fds)		\
+		socketpair(AF_UNIX,SOCK_STREAM,0,(fds))
 
 /**
  * 传送文件描述符
