@@ -23,7 +23,7 @@ struct slock* s_alloc(void) {
 	if ((sp = malloc(sizeof(struct slock))) == NULL)
 		return NULL;
 	do {
-		snprintf(sp->name, sizeof(sp->name), "/%ld.%d", (long)getpid(), cnt++);
+		snprintf(sp->name, sizeof(sp->name), "/%d.%d", getpid(), cnt++);
 		sp->semp = sem_open(sp->name, O_CREAT | O_EXCL, S_IRWXU, 1);
 	} while ((sp->semp == SEM_FAILED) && (errno = EEXIST));
 	if (sp->semp == SEM_FAILED) {

@@ -32,8 +32,8 @@ int main(int argc, char* argv[])
 			err_sys("read error");
 		close(fds[1]);
 
-		if (waitpid(pid, NULL, 0) != pid)
-			err_sys("waitpid error");
+		//if (waitpid(pid, NULL, 0) != pid)
+		//	err_sys("waitpid error");
 	}
 	else {
 		close(fds[1]);
