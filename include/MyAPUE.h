@@ -28,6 +28,7 @@
 
 #define FILE_MODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 #define DIR_MODE (FILE_MODE|S_IXUSR|S_IXGRP|S_IXOTH)
+#define IPC_PERM 0666
 
 
 /**
@@ -180,8 +181,9 @@ int Pclose(FILE* pf);
 
 typedef int lock_t;
 int BSem_Create(lock_t* lock, const char* path, int projid);
-int BSem_Destroy(lock_t* lock);
+int BSem_Create1(lock_t* lock, const char* path, int projid);
 int BSem_Init(lock_t* lock, int initv);
+int BSem_Destroy(lock_t* lock);
 int BSem_Sub(lock_t* lock);
 int BSem_Add(lock_t* lock);
 

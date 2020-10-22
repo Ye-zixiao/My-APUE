@@ -10,7 +10,7 @@ all: $(PRGS)
 
 $(PRGS):%:%.o
 	$(CC) $(CFLAGS) $(DPATH) $< -o $@
-	-rm $<
+#	-rm $<
 
 $(OBJS):%.o:%.c
 	$(CC) $(CFLAGS) $(DPATH) -c $<

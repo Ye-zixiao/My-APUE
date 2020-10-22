@@ -1,14 +1,13 @@
+/**
+ * 使用System V（XSI）Semaphore实现的二值信号量
+ */
 #include "../include/MyAPUE.h"
 #include <sys/ipc.h>
 #include <sys/sem.h>
 
 
-/**
- * 使用System V（XSI）Semaphore实现的二值信号量
- */
-#define DEFAULT_PERM (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
 #define DEFAULT_PATH "/tmp"
-#define DEFAULT_PROID 24
+#define DEFAULT_PROID 1
 
 union semun {
 	int val;
@@ -35,7 +34,7 @@ int BSem_Create(lock_t* lock, const char* path, int projid) {
 	}
 	if ((semkey = ftok(path, projid)) == -1)
 		return -1;
-	if ((*lock = semget(semkey, 1, IPC_CREAT | IPC_EXCL | DEFAULT_PERM)) != -1) {
+	if ((*lock = semget(semkey, 1, IPC_CREAT | IPC_EXCL | IPC_PERM)) != -1) {
 		arg.val = 0;
 		sbuf.sem_num = 0;
 		sbuf.sem_op = 1;
@@ -68,6 +67,26 @@ int BSem_Create(lock_t* lock, const char* path, int projid) {
 
 
 /**
+ * 另一种创建二值信号量的方式，但是没有做出进程间竞态条件的
+ * 防范措施，但是在多线程进程中使用还是够用的
+ */
+int BSem_Create1(lock_t* lock, const char* path, int projid) {
+	key_t semkey;
+
+	if (path == NULL || projid < 0 || projid>255)
+		*lock = semget(IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL | IPC_PERM);
+	else {
+		if ((semkey = ftok(path, projid)) == -1)
+			return -1;
+		*lock = semget(semkey, 1, IPC_CREAT | IPC_EXCL | IPC_PERM);
+	}
+	if (*lock == -1)
+		return -1;
+	return 0;
+}
+
+
+/**
  * 初始化二值信号量的值为指定值
  */
 int BSem_Init(lock_t* lock, int initv) {
@@ -79,7 +98,7 @@ int BSem_Init(lock_t* lock, int initv) {
 
 
 /** 
- * 删除执行二值信号量
+ * 删除指定二值信号量
  */
 int BSem_Destroy(lock_t* lock) {
 	return semctl(*lock, 0, IPC_RMID);

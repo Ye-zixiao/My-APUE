@@ -21,6 +21,7 @@ int main(void)
 	if ((area = shmat(shmid, 0, 0)) == (void*)-1)
 		err_sys("shmat error");
 	*(long*)area = 0L;
+	printf("original value: %ld\n", *(long*)area);
 
 	/* 对存储映射区中的数据交替由父子进程递增 */
 	TELL_WAIT();
