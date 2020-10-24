@@ -40,10 +40,6 @@ prompt:
  试验结果：
 $ ./client
 prompt> strtok.c 0
-/**
- * 我们的目的仍然是从上的字符串中"hello\tworld show\nme+your-code"
- * 分割出子字符串单词
- */
 #include <stdio.h>
 #include <string.h>
 

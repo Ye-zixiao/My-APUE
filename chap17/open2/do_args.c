@@ -1,13 +1,8 @@
 #include "opend.h"
 #include <string.h>
 
-/**
- * WHITE使用用于strtok的分隔符，这里的分隔符的意思是：若针对的字符串中
- * 出现了分隔符字符串中的任一字符，则将针对字符串在此位置前后分割。例如
- * 将下面的WHITE适用于"hello world\tshow me\nyour code"分割成hello、
- * world、show、me、your、code
- */
-#define WHITE " \t\n"
+
+#define WHITE " \t\n"//分隔符
 #define MAXARGC 50
 
 
@@ -51,25 +46,31 @@ static int buf_args(char* buf, int (*optfunc)(int, char**)) {
  * 使用buf指向的字符数组中的信息打开指定文件，并将其文件描述符
  * 发送给客户进程 
  */
-void handle_request(char* buf, int nread, int fd) {
+void handle_request(char* buf, int nread, int clifd, uid_t uid) {
 	int newfd;
 
 	if (buf[nread - 1] != '\0') {
-		snprintf(errmsg, MAXLINE - 1,
-			"request not null terminated: %*.*s\n", nread, nread, buf);
-		send_err(fd, -1, errmsg);
-	}
-	if (buf_args(buf, cli_args) == -1) {
-		send_err(fd, -1, errmsg);
+		snprintf(errmsg, MAXLINE - 1, "request from uid %d not null terminated: %*.*s\n",
+			uid, nread, nread, buf);
+		send_err(clifd, -1, errmsg);
 		return;
 	}
-	if ((newfd = open(pathname, oflag, FILE_MODE)) == -1) {
+	log_msg("request: %s, from uid %d", buf, uid);
+	if (buf_args(buf, cli_args) < 0) {
+		send_err(clifd, -1, errmsg);
+		log_msg(errmsg);
+		return;
+	}
+
+	if ((newfd = open(pathname, oflag)) < 0) {
 		snprintf(errmsg, MAXLINE - 1, "can't open %s: %s\n",
 			pathname, strerror(errno));
-		send_err(fd, -1, errmsg);
+		send_err(clifd, -1, errmsg);
+		log_msg(errmsg);
 		return;
 	}
-	if (send_fd(fd, newfd) < 0)
-		err_sys("send_fd error");
+	if (send_fd(clifd, newfd) < 0)
+		log_sys("send_fd error");
+	log_msg("send fd %d over fd %d for %s", newfd, clifd, pathname);
 	close(newfd);
 }
