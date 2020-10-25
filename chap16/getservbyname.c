@@ -1,26 +1,19 @@
 #include "../include/MyAPUE.h"
-#include <arpa/inet.h>
 #include <netdb.h>
+#include <netinet/in.h>
 
 int main(int argc, char* argv[])
 {
-	struct servent* pent;
-
+	struct servent* psvent;
+	
 	if (argc != 3)
-		err_quit("usage: getserv <name> <protocol>");
+		err_quit("usage: %s <server> <protocol>", argv[0]);
 
-	if ((pent = getservbyname(argv[1], argv[2])) == NULL)
+	if ((psvent = getservbyname(argv[1], argv[2])) == NULL)
 		err_sys("getservbyname error");
-	printf("NAME    :  %s\n", pent->s_name);
-	printf("PORT    :  %d\n", ntohs(pent->s_port));
-	printf("PROTOCOL:  %s\n", pent->s_proto);
-	if (pent->s_aliases != NULL) {
-		printf("ALIAS   :  ");
-		for (int i = 0; pent->s_aliases[i]; ++i) {
-			printf("%s ", pent->s_aliases[i]);
-		}
-		putchar('\n');
-	}
+	printf("server name    : %s\n", psvent->s_name);
+	printf("server port    : %d\n", ntohs(psvent->s_port));
+	printf("server protocol: %s\n", psvent->s_proto);
 
 	exit(EXIT_SUCCESS);
 }
