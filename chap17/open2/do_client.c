@@ -36,7 +36,6 @@ again:
 			return i;
 		}
 	}
-
 	client_alloc();
 	goto again;
 }

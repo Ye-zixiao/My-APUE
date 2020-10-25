@@ -7,6 +7,7 @@
 #define CS_OPEN "/tmp/server.socket"
 #define MAXLINE BUFSIZE
 
+
 extern int debug1;
 extern int oflag;
 extern char errmsg[];

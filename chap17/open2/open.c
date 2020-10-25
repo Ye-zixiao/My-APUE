@@ -20,7 +20,7 @@ int csopen(char* pathname, int oflag) {
 		}
 	}
 
-	//其实这个oflag根本就不能用户自定义！💩
+	//其实这个oflag根本就不能用户自定义！💩😆
 	sprintf(buf, " %d", oflag);
 	iov[0].iov_base = CL_OPEN" ";
 	iov[0].iov_len = strlen(CL_OPEN) + 1;

@@ -22,8 +22,8 @@ static int cli_args(int argc, char* argv[]) {
 
 
 /**
- * 将buf指向的字符数组中的字符串进行分割，然后交给optfunc函数（实则
- * 是cli_args()函数）检查，并对pathname和oflag进行设置
+ * 将buf指向的字符数组中的字符串进行分割，然后交给optfunc函数（实
+ * 为cli_args()函数）检查，并对pathname和oflag进行设置
  */
 static int buf_args(char* buf, int (*optfunc)(int, char**)) {
 	char* ptr, * argv[MAXARGC];

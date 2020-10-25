@@ -31,8 +31,8 @@ static struct pollfd* grow_pollfd(struct pollfd* pfd, int* maxfd) {
  * 做出响应，或者做出错误提示、关闭连接等操作
  */
 void ploop(void) {
-	int maxfd = NALLOC, numfd = 1;
-	int listenfd, clifd, nread;
+	int maxfd = NALLOC, numfd = 1, index;
+	int nread, listenfd, clifd, fd;
 	struct pollfd* pfd;
 	char buf[MAXLINE];
 	uid_t uid;
@@ -45,15 +45,18 @@ void ploop(void) {
 		pfd[i].revents = 0;
 	}
 
+	/* 服务进程创建监听套接字 */
 	if ((listenfd = serv_listen(CS_OPEN)) < 0)
 		log_sys("serv_listen error");
 	client_add(listenfd, 0);//uid==0表示listenfd
 	pfd[0].fd = listenfd;
 
+
 	for (;;) {
 		if (poll(pfd, numfd, -1) == -1)
 			log_sys("poll error");
 
+		/* 若listenfd描述符变得有效，这表明接收到客户进程的连接建立请求 */
 		if (pfd[0].revents & POLLIN) {
 			if ((clifd = serv_accept(listenfd, &uid)) < 0)
 				log_sys("serv_accept error");
@@ -68,17 +71,22 @@ void ploop(void) {
 			log_msg("new connection: uid %d, fd %d", uid, clifd);
 		}
 
+		/* 遍历所有的pollfd结构体数组成员，以检查是那些套接字描述符变得有效，
+			并做出相应的请求处理或者当连接关闭的时候做出善后处理 */
 		for (int i = 1; i < numfd; i++) {
+			fd = pfd[i].fd;
+			index = client_index(fd);
+
 			if (pfd[i].revents & POLLHUP)
 				goto hungup;
 			else if (pfd[i].revents & POLLIN) {
-				if ((nread = read(pfd[i].fd, buf, MAXLINE)) < 0)
-					log_sys("read error on fd %d", pfd[i].fd);
+				if ((nread = read(fd, buf, MAXLINE)) < 0)
+					log_sys("read error on fd %d", fd);
 				else if (nread == 0) {
 hungup:
-					log_msg("closed: uid %d, fd %d", client[i].uid, client[i].fd);
-					client_del(clifd);
-					close(pfd[i].fd);
+					log_msg("closed: uid %d, fd %d", client[index].uid, fd);
+					client_del(fd);
+					close(fd);
 					if (i < (numfd - 1)) {
 						pfd[i].fd = pfd[numfd - 1].fd;
 						pfd[i].events = pfd[numfd - 1].events;
@@ -88,7 +96,7 @@ hungup:
 					numfd--;
 				}
 				else {
-					handle_request(buf, nread, pfd[i].fd, client[i].uid);
+					handle_request(buf, nread, fd, client[index].uid);
 				}
 			}
 		}

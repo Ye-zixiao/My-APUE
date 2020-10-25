@@ -22,6 +22,7 @@ void sloop(void) {
 	maxfd = listenfd;
 	maxindex = -1;
 
+
 	for (;;) {
 		rset = allset;
 		if ((n = select(maxfd + 1, &rset, NULL, NULL, NULL)) == -1)

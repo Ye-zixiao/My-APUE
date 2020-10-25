@@ -7,6 +7,7 @@
 #define CS_OPEN "/tmp/server.socket"
 #define MAXLINE BUFSIZE
 
+
 int csopen(char* pathname, int oflag);
 
 
