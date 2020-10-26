@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from socket import *
+
 serverName = '191.101.232.165' # 服务器地址，本例中使用一台远程主机
 serverPort = 12000 # 服务器指定的端口
 clientSocket = socket(AF_INET, SOCK_DGRAM) # 创建UDP套接字，使用IPv4协议

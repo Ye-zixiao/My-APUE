@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from socket import *
+
 serverPort = 12000
 serverSocket = socket(AF_INET, SOCK_STREAM) # 创建TCP欢迎套接字，使用IPv4协议
 serverSocket.bind(('',serverPort)) # 将TCP欢迎套接字绑定到指定端口

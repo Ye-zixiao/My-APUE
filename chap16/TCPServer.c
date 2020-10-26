@@ -10,7 +10,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#define MAXLINE 128
+#define MAXLINE 256
 #define PORT_NUM 12000
 
 
