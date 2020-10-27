@@ -61,19 +61,34 @@ void log_exit(int error, const char* fmt, ...);
 
 
 /**
- * 输出状态与信息
+ * 文件I/O
  */
+const char* file_mode(__mode_t mode);
+const char* file_type1(__mode_t mode,int simple);
+#define file_type(mode)	\
+		file_type1((mode),0)
 void pr_mask(const char* str);
-void pr_exit(int status);
-void pr_resuid(void);
+
+
+/**
+ * 时间
+ */
 const char* currTime(const char*format);
 const char* transformTime(time_t t, const char* format);
 void get_abstime(struct timespec* tsp, long seconds);
-void _pr_limit(const char* rname, int resource);
-int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
 
 #define pr_now() \
 	printf("Current time: %s\n",currTime(NULL))
+
+
+/**
+ * 输出状态与信息
+ */
+void pr_exit(int status);
+void pr_resuid(void);
+void _pr_limit(const char* rname, int resource);
+int pr_mutexattr(const pthread_mutexattr_t* mutexattr);
+
 #define pr_limit(resource) _pr_limit(#resource,resource)
 
 char* mygetenv(const char* name);
@@ -82,6 +97,8 @@ char* getenv_r(const char* name);
 long open_max(void);
 
 const char* getusername(uid_t uid);
+const char* getgrpname(gid_t gid);
+
 
 /**
  * 信号传递
@@ -179,6 +196,7 @@ ssize_t writen(int fd, const  void* ptr, size_t nbytes);
 FILE* Popen(const char* cmdstring, const char* type);
 int Pclose(FILE* pf);
 
+//使用System V(XSI)信号量实现的二值信号量
 typedef int lock_t;
 int BSem_Create(lock_t* lock, const char* path, int projid);
 int BSem_Create1(lock_t* lock, const char* path, int projid);
@@ -214,7 +232,7 @@ int serv_listen(const char* name);
 int serv_accept(int listenfd, uid_t* uidptr);
 int cli_conn(const char* name);
 
-//提供类似于server_listen类似的功能但是可以支持backlog选项
+//提供类似于serv_listen类似的功能但是可以支持backlog选项
 int server_listen(const char* name, int qlen);
 
 #define fd_pipe(fds)		\
@@ -227,5 +245,8 @@ int send_fd(int sockfd, int fd_to_send);
 int send_err(int sockfd, int status, const char* errmsg);
 int recv_fd(int sockfd, ssize_t(*userfunc)(int, const void*, size_t));
 int recv_ufd(int sockfd, uid_t* uidptr, ssize_t(*userfunc)(int, const void*, size_t));
+
+
+
 
 #endif // !MY_AUPE_H_

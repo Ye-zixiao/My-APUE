@@ -1,10 +1,6 @@
 CC:=gcc
 cflags:=-Wall -Werror -lapue -O
-
-SRCS:=myfile.c access_test.c umask.c chmod.c mychgrp.c blk.c \
-		myrename.c mkrmdir.c myln.c myreadlink.c myslnk.c \
-		truc.c mydir.c myftw.c cd-cwd.c devrdev.c myhandle_cp.c \
-		mystat.c chftw.c testPathMax.c
+SRCS:= $(wildcard *.c)
 OBJS:=${SRCS:c=o}
 PROGS:=${SRCS:.c=}
 
@@ -16,7 +12,7 @@ ${PROGS}:%:%.o Makefile
 
 clean:
 	rm -f ${PROGS} ${OBJS}
-	rm -f outfile foo bar
+	rm -f outfile
 
 rmprg:
 	rm -f ${PROGS}
