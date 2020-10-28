@@ -45,7 +45,6 @@ void pr_exit(int status) {
 			WSTOPSIG(status));
 }
 
-#ifdef _RESUID
 void print_resuid(void) {
 	uid_t ruid, euid, suid;
 	if (getresuid(&ruid, &euid, &suid) == -1)
@@ -53,7 +52,6 @@ void print_resuid(void) {
 	printf("ruid: %d, euid: %d, suid: %d\n",
 		ruid, euid, suid);
 }
-#endif
 
 int System(const char* cmdstring) {
 	if (cmdstring == NULL)

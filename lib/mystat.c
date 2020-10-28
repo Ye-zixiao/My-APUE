@@ -62,7 +62,7 @@ void _pr_limit(const char* rname, int resource) {
 }
 
 
-void print_resuid(void) {
+void pr_resuid(void) {
 	uid_t ruid, euid, suid;
 	if (getresuid(&ruid, &euid, &suid) == -1)
 		err_sys("getresuid error");

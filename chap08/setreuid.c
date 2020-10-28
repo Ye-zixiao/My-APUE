@@ -3,7 +3,6 @@
 * 是将当前进程的ruid保持不变，将euid、保留的suid设置为进程的
 * ruid（若为超级用户执行）；否认普通用户只能修改euid
 * */
-#define _RESUID
 #include"MyAPUE.h"
 
 int main(void)
