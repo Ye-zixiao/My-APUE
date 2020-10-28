@@ -1,20 +1,6 @@
 /**
- * 在客户进程和服务进程之间创建完逻辑连接后：
- * 
- *     服务进程----------------------->运行uptime的子进程
- *        |                               |       | 
- *        |                               |       |
- *        v                               v       v
- *      socket()                 STDOUT_FILENO   STDERR_FILENO
- *    创建的sockfd                         \      /
- *   用来监听连接请求                        \   /
- *                                            |
- *                                            v
- *                                   accept()创建的套接字
- *                                            |
- *                                            |
- *                                            v
- *                        客户进程：   socket()创建的套接字
+ * 一个不会使服务进程阻塞在等待子进程执行完毕才能继续
+ * 处理后续请求的uptime服务进程
  */
 
 #include "../include/MyAPUE.h"
@@ -30,9 +16,35 @@
 #endif
 
 
+static void sig_child(int signo) {
+	while (waitpid((pid_t)-1, NULL, WNOHANG) > 0);
+}
+
+
+/**
+ * 使用SA_RESTART标志调用sigaction()函数进行信号处理程序注册，
+ * 这样因子进程终止而产生的信号SIG_CHLD即使中断服务进程的系统
+ * 调用正常执行，仍然能够重新启动
+ */
+Sigfunc* signal_restart(int signo, Sigfunc* func) {
+	struct sigaction act, oact;
+	
+	act.sa_handler = func;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = 0;
+	act.sa_flags |= SA_RESTART;
+	if (sigaction(signo, &act, &oact) == -1)
+		return SIG_ERR;
+	return oact.sa_handler;
+}
+
+
 void server(int sockfd) {
 	int clfd;
 	pid_t pid;
+
+	if (signal_restart(SIGCHLD, sig_child) == SIG_ERR)
+		syslog(LOG_ERR, "signal_restart error");
 
 	set_cloexec(sockfd);
 	for (;;) {
@@ -57,10 +69,8 @@ void server(int sockfd) {
 			syslog(LOG_ERR, "ruptimed: unexpected return from exec: %s",
 				strerror(errno));
 		}
-		/*else {
+		else
 			close(clfd);
-			waitpid(pid, NULL, 0);
-		}*/
 	}
 }
 

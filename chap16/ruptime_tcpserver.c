@@ -45,7 +45,8 @@ void serve(int sockfd) {
 			exit(EXIT_FAILURE);
 		}
 		set_cloexec(clfd);
-		if ((fp = popen("/usr/bin/uptime", "r")) == NULL) {
+		//if ((fp = popen("/usr/bin/uptime", "r")) == NULL) {
+		if ((fp = popen("ps -aux|wc -l", "r")) == NULL) {//返回给客户进程当前运行进程数
 			sprintf(buf, "error: %s\n", strerror(errno));
 			send(clfd, buf, strlen(buf), 0);
 		}
