@@ -200,7 +200,7 @@ int recv_ufd(int sockfd, uid_t* uidptr,
 #endif
 
     for (;;) {
-        /* 出似乎recvmsg函数所需要的msghdr结构体 */
+        /* 初始化recvmsg函数所需要的msghdr结构体 */
         iov[0].iov_base = buf;
         iov[0].iov_len = sizeof(buf);
         msg.msg_iov = iov;
