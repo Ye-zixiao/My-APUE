@@ -88,6 +88,7 @@ int main(int argc, char* argv[])
 		printf("Create message queue(key: %d, id: %d)\n", KEY + i, msqids[i]);
 
 		if (socketpair(AF_UNIX, SOCK_DGRAM, 0, fds) == -1)
+		//if (pipe(fds) == -1) //普通的单双工管道pipe也可以完成这个数据转交的工作
 			err_sys("socketpair error");
 		targs[i].msqid = msqids[i];
 		targs[i].sockfd = fds[1];

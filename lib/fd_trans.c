@@ -35,8 +35,8 @@ static struct cmsghdr* cmptr = NULL;
  */
 int send_fd(int sockfd, int fd_to_send) {
     struct CREDSTRUCT* credp;
-    struct cmsghdr* cmp;
     struct iovec iov[1];
+    struct cmsghdr* cmp;
     struct msghdr msg;
     char buf[2];
 
@@ -67,7 +67,7 @@ int send_fd(int sockfd, int fd_to_send) {
         msg.msg_controllen = CONTROLLEN;
 
         //设置文件描述符
-        cmp = cmptr;
+        cmp = CMSG_FIRSTHDR(&msg);
         cmp->cmsg_len = RIGHTSLEN;
         cmp->cmsg_type = SOL_SOCKET;
         cmp->cmsg_type = SCM_RIGHTS;
@@ -90,7 +90,7 @@ int send_fd(int sockfd, int fd_to_send) {
 
     buf[0] = '\0';
     if (sendmsg(sockfd, &msg, 0) != 2)
-        err_sys("sendmsg error");
+        return -1;
     return 0;
 }
 
