@@ -244,9 +244,9 @@ int server_listen(const char* name, int qlen);
 int send_fd(int sockfd, int fd_to_send);
 int send_err(int sockfd, int status, const char* errmsg);
 int recv_fd(int sockfd, ssize_t(*userfunc)(int, const void*, size_t));
+
+int send_ufd(int sockfd, int fd_to_send);
 int recv_ufd(int sockfd, uid_t* uidptr, ssize_t(*userfunc)(int, const void*, size_t));
-
-
 
 
 #endif // !MY_AUPE_H_

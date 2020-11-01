@@ -8,7 +8,7 @@
  * world、show、me、your、code
  */
 #define WHITE " \t\n"
-#define MAXARGC 50
+#define ARGCNUM 10
 
 
 /**
@@ -31,15 +31,20 @@ static int cli_args(int argc, char* argv[]) {
  * 是cli_args()函数）检查，并对pathname和oflag进行设置
  */
 static int buf_args(char* buf, int (*optfunc)(int, char**)) {
-	char* ptr, * argv[MAXARGC];
+	static char** argv;
 	int argc = 0;
+	char* ptr;
 
+	if((argv = malloc(sizeof(char*) * ARGCNUM)) == NULL)
+		return -1;
 	if (strtok(buf, WHITE) == NULL)
 		return -1;
 	argv[argc++] = buf;
 	while ((ptr = strtok(NULL, WHITE)) != NULL) {
-		if (argc >= MAXARGC - 1)
-			return -1;
+		if (argc >= ARGCNUM - 1)
+			//增加了动态调整的功能
+			if((argv = realloc(argv, sizeof(char*) * ARGCNUM)) == NULL)
+				return -1;
 		argv[argc++] = ptr;
 	}
 

@@ -1,5 +1,5 @@
 CC:= gcc
-DPATH:= -lpthread -lbsd -lrt -lapue -Wl,-rpath,../lib -L../lib -lmyapue
+DPATH:= -lpthread -lbsd -lrt -Wl,-rpath,../lib -L../lib -lmyapue
 CFLAGS:= -Wall -O
 SRCS:= $(wildcard *.c)
 OBJS:= $(SRCS:c=o)

@@ -1,5 +1,5 @@
 CC:= gcc
-DPATH:= -lpthread -lbsd -lrt -lapue -Wl,-rpath,../../lib -L../../lib -lmyapue
+DPATH:= -lpthread -lbsd -lrt -Wl,-rpath,../../lib -L../../lib -lmyapue
 CFLAGS:= -Wall -O
 SERVER:= server.c opend.c
 CLIENT:= client.c open.c
