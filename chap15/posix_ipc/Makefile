@@ -1,24 +1,29 @@
-CC:= gcc
-DPATH:= -lpthread -lbsd -lrt -lapue -Wl,-rpath,../../lib -L../../lib -lmyapue
-CFLAGS:= -Wall -O
-SRCS:= $(wildcard *.c)
-OBJS:= $(SRCS:c=o)
-PRGS:= $(SRCS:.c=)
+CC := gcc
+ROOT := ../..
+LIBPATH := $(ROOT)/lib
+INCLUDE := $(ROOT)/include
+
+DLFLAGS := -Wl,-rpath $(LIBPATH) -L$(LIBPATH) -lmyapue -lpthread -lbsd -lrt
+CFLAGS := -Wall -O -I$(INCLUDE)
+SRCS := $(wildcard *.c)
+OBJS := $(SRCS:c=o)
+PRGS := $(SRCS:.c=)
+LIBAPUE := $(LIBPATH)/libmyapue.so
 
 .PHONY: all
-all: $(PRGS)
+all: $(LIBAPUE) $(PRGS)
 
-#每一个可执行文件%的生成都依赖于其同名绝对目标文件%.o
 $(PRGS):%:%.o
-	$(CC) $(CFLAGS) $(DPATH) $< -o $@
-	-rm $<
+	$(CC) $(CFLAGS) $(DLFLAGS) $< -o $@
 
-#每一个绝对目标文件%.o的生成都依赖于其同名源文件%.c
 $(OBJS):%.o:%.c
-	$(CC) $(CFLAGS) $(DPATH) -c $<
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+$(LIBAPUE):
+	cd $(LIBPATH) && make
 
 clean: rmobjs
 	-rm $(PRGS)
 	
 rmobjs:
-	-rm *.o
+	-rm $(OBJS)

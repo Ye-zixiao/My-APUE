@@ -1,22 +1,29 @@
-CC:= gcc
-DPATH:= -lpthread -lbsd -lrt -Wl,-rpath,../lib -L../lib -lmyapue
-CFLAGS:= -Wall -O
-SRCS:= $(wildcard *.c)
-OBJS:= $(SRCS:c=o)
-PRGS:= $(SRCS:.c=)
+CC := gcc
+ROOT := ..
+INCLUDE := $(ROOT)/include
+LIBPATH := $(ROOT)/lib
 
-.PHONY: all
-all: $(PRGS)
+DLFLAGS := -Wl,-rpath $(LIBPATH) -L$(LIBPATH) -lmyapue -lpthread -lbsd -lrt
+CFLAGS := -O -Wall -I$(INCLUDE)
+
+SRCS := $(wildcard *.c)
+OBJS := $(SRCS:c=o)
+PRGS := $(SRCS:.c=)
+LIBAPUE := $(LIBPATH)/libmyapue.so
+
+.PHONY:
+all: $(LIBAPUE) $(PRGS)
+
+$(LIBAPUE):
+	cd $(LIBPATH) && make
 
 $(PRGS):%:%.o
-	$(CC) $(CFLAGS) $(DPATH) $< -o $@
-#	-rm $<
+	$(CC) -o $@ $< $(DLFLAGS) $(CFLAGS)
 
 $(OBJS):%.o:%.c
-	$(CC) $(CFLAGS) $(DPATH) -c $<
 
-clean: rmobjs
+clean: rmobj
 	-rm $(PRGS)
-	
-rmobjs:
-	-rm *.o
+
+rmobj:
+	-rm $(OBJS)

@@ -1,26 +1,32 @@
-CC:= gcc
-DPATH:= -lpthread -lbsd -lrt -Wl,-rpath,../../lib -L../../lib -lmyapue
-CFLAGS:= -Wall -O
-SERVER:= server.c do_args.c do_client.c sloop.c ploop.c eloop.c
-CLIENT:= client.c open.c
-SERVEROBJS:= $(SERVER:c=o)
-CLIENTOBJS:= $(CLIENT:c=o)
+CC := gcc
+ROOT := ../..
+LIBPATH := $(ROOT)/lib
 
-.PHONY: all
-all:$(SERVEROBJS) $(CLIENTOBJS)
-	$(CC) -o server $(SERVEROBJS) $(CFLAGS) $(DPATH) 
-	$(CC) -o client $(CLIENTOBJS) $(CFLAGS) $(DPATH)
+DLFLAGS := -Wl,-rpath $(LIBPATH) -L$(LIBPATH) -lmyapue -lpthread -lbsd -lrt
+CFLAGS := -Wall -O# -I$(ROOT)/include
 
-$(SERVEROBJS):%.o:%.c
-	$(CC) -c $< $(CFLAGS) $(DPATH)
+SERVS := server.c do_args.c do_client.c sloop.c ploop.c eloop.c
+CLIS := client.c open.c
+SERVOBJS := $(SERVS:c=o)
+CLIOBJS := $(CLIS:c=o)
+LIBAPUE := $(LIBPATH)/libmyapue.so
 
-$(CLIENTOBJS):%.o:%.c
-	$(CC) -c $< $(CFLAGS) $(DPATH)
+.PHONY:
+all: $(LIBAPUE) $(SERVOBJS) $(CLIOBJS)
+	$(CC) -o server $(SERVOBJS) $(CFLAGS) $(DLFLAGS)
+	$(CC) -o client $(CLIOBJS) $(CFLAGS) $(DLFLAGS)
 
-clean:rmobjs
+$(LIBAPUE):
+	cd $(LIBPATH) && make
+
+$(SERVOBJS):%.o:%.c
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+$(CLIOBJS):%.o:%.c
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+clean: rmobj
 	-rm server client
 
-rmobjs:
-	@-rm $(CLIENTOBJS) $(SERVEROBJS)
-
-
+rmobj:
+	-rm $(SERVOBJS) $(CLIOBJS)

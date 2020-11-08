@@ -1,25 +1,29 @@
-CC:=gcc
-cflags:=-Wall -Wl,-rpath,../lib -L../lib -lmyapue \
-				-O #-Werror
-#-WL,-rpath,../lib -L../lib -lmyapue 的意思是到相对路径../lib中找动态链接库
-SRCS:=tellwait.c abort.c good_system.c whySystem.c Sleep.c \
-		hrsleep.c jobctrl.c strsignal.c linux_system.c \
-		multi-settimer.c pc_count.c acron.c sigxfsz.c \
-		alrm_fwrite.c
-OBJS:=$(RCS:c=o)
-PROGS:=$(SRCS:.c=)
+CC := gcc
+ROOT := ..
+INCLUDE := $(ROOT)/include
+LIBPATH := $(ROOT)/lib
+
+DLFLAGS := -Wl,-rpath $(LIBPATH) -L$(LIBPATH) -lmyapue -lpthread -lbsd -lrt
+CFLAGS := -O -Wall -I$(INCLUDE)
+
+SRCS := $(wildcard *.c)
+OBJS := $(SRCS:c=o)
+PRGS := $(SRCS:.c=)
+LIBAPUE := $(LIBPATH)/libmyapue.so
 
 .PHONY:
-all:$(PROGS)
+all: $(LIBAPUE) $(PRGS)
 
-$(PROGS):%:%.o Makefile
-	$(CC) $< -o $@ $(cflags)
+$(LIBAPUE):
+	cd $(LIBPATH) && make
 
-$(OBJS):%.o:%.c Makefile
-	$(CC) $(cflags) -c $<
+$(PRGS):%:%.o
+	$(CC) -o $@ $< $(DLFLAGS) $(CFLAGS)
 
-clean:rmobj
-	rm $(PROGS)
+$(OBJS):%.o:%.c
+
+clean: rmobj
+	-rm $(PRGS)
 
 rmobj:
-	rm *.o
+	-rm $(OBJS)

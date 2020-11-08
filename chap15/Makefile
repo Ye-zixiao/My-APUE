@@ -1,24 +1,29 @@
-CC:= gcc
-DPATH:= -lpthread -lbsd -lrt -Wl,-rpath,../lib -L../lib -lmyapue
-CFLAGS:= -Wall -O
-SRCS:= $(wildcard *.c)
-OBJS:= $(SRCS:c=o)
-PRGS:= $(SRCS:.c=)
+CC := gcc
+ROOT := ..
+INCLUDE := $(ROOT)/include
+LIBPATH := $(ROOT)/lib
 
-.PHONY: all
-all: $(PRGS)
+DLFLAGS := -Wl,-rpath $(LIBPATH) -L$(LIBPATH) -lmyapue -lpthread -lbsd -lrt
+CFLAGS := -O -Wall -I$(INCLUDE)
 
-#每一个可执行文件%的生成都依赖于其同名绝对目标文件%.o
+SRCS := $(wildcard *.c)
+OBJS := $(SRCS:c=o)
+PRGS := $(SRCS:.c=)
+LIBAPUE := $(LIBPATH)/libmyapue.so
+
+.PHONY:
+all: $(LIBAPUE) $(PRGS)
+
+$(LIBAPUE):
+	cd $(LIBPATH) && make
+
 $(PRGS):%:%.o
-	$(CC) $(CFLAGS) $(DPATH) $< -o $@
-#	@-rm $<
+	$(CC) -o $@ $< $(DLFLAGS) $(CFLAGS)
 
-#每一个绝对目标文件%.o的生成都依赖于其同名源文件%.c
 $(OBJS):%.o:%.c
-	$(CC) $(CFLAGS) $(DPATH) -c $<
 
-clean:rmobjs
+clean: rmobj
 	-rm $(PRGS)
-	
-rmobjs:
-	-rm *.o
+
+rmobj:
+	-rm $(OBJS)
