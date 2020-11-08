@@ -1,7 +1,7 @@
 /**
  * 使用System V（XSI）Semaphore实现的二值信号量
  */
-#include "../include/MyAPUE.h"
+#include "MyAPUE.h"
 #include <sys/ipc.h>
 #include <sys/sem.h>
 

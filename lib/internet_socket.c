@@ -1,4 +1,4 @@
-#include "../include/MyAPUE.h"
+#include "MyAPUE.h"
 #include <sys/socket.h>
 
 #define MAXSLEEP 128

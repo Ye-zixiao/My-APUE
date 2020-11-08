@@ -1,4 +1,4 @@
-#include "../include/MyAPUE.h"
+#include "MyAPUE.h"
 #include <string.h>
 
 #define MAXLINE BUFSIZE

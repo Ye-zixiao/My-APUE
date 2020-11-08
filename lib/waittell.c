@@ -1,4 +1,4 @@
-#include "../include/MyAPUE.h"
+#include "MyAPUE.h"
 
 static sigset_t newmask, oldmask, zeromask;
 static volatile sig_atomic_t sigflag;

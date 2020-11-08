@@ -1,4 +1,4 @@
-#include "../include/MyAPUE.h"
+#include "MyAPUE.h"
 
 #define TIMESTRLEN 64
 

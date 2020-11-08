@@ -1,4 +1,4 @@
-#include "../include/MyAPUE.h"
+#include "MyAPUE.h"
 #include <string.h>
 
 void Pthread_create(pthread_t* tid,

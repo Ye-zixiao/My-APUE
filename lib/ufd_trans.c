@@ -3,7 +3,7 @@
  * 发送多个控制消息（例如多个文件描述符）可能在Linux中得不到支持，好像
  * 只有FreeBSD支持！
  */
-#include "../include/MyAPUE.h"
+#include "MyAPUE.h"
 #include <string.h>
 
 #define MAXLINE BUFSIZE

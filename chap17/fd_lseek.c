@@ -4,7 +4,7 @@
  * 偏移量是否被修改（即验证两进程中的文件描述符是否同指向同一
  * 个文件打开表项）
  */
-#include "../include/MyAPUE.h"
+#include "MyAPUE.h"
 
 int main(int argc, char* argv[])
 {

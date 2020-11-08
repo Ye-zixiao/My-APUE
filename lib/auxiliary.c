@@ -1,3 +1,3 @@
-#include "../include/MyAPUE.h"
+#include "MyAPUE.h"
 
 int log_to_stderr = 0;
