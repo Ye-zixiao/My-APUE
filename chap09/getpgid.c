@@ -1,5 +1,5 @@
-﻿#include"../include/MyAPUE.h"
-#include<termio.h>
+﻿#include "../include/MyAPUE.h"
+#include <termio.h>
 
 int main(void) {
 	printf("pid: %4d, ppid= %4d, pgid= %4d, sid= %4d, session id= %4d\n",

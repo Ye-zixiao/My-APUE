@@ -7,13 +7,13 @@
 #define	_GNU_SOURCE
 #endif
 
-#include<stdio.h>
-#include<unistd.h>
-#include<stdio.h>
-#include<stdlib.h>
-#include<signal.h>
-#include<errno.h>
-#include<sys/wait.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <errno.h>
+#include <sys/wait.h>
 
 #define BUFSIZE 4096
 

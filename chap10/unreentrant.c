@@ -1,6 +1,6 @@
-﻿#include"MyAPUE.h"
-#include<string.h>
-#include<pwd.h>
+﻿#include "MyAPUE.h"
+#include <string.h>
+#include <pwd.h>
 
 static void sig_handler(int sig) {
 	struct passwd* ppwd;

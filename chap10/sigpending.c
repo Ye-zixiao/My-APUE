@@ -1,6 +1,6 @@
-﻿#include"MyAPUE.h"
-#include<signal.h>
-#include<errno.h>
+﻿#include "MyAPUE.h"
+#include <signal.h>
+#include <errno.h>
 
 static void quit_handler(int sig);
 

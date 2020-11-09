@@ -3,10 +3,10 @@
  *	而与之不同，sigsetjmp/siglongjmp函数对信号屏蔽字就就具有对信号屏蔽字
  *	保护和恢复的能力
  * */
-#include"MyAPUE.h"
-#include<signal.h>
-#include<time.h>
-#include<setjmp.h>
+#include "MyAPUE.h"
+#include <signal.h>
+#include <time.h>
+#include <setjmp.h>
 
 static void sig_usr1(int);
 static void sig_alrm(int);

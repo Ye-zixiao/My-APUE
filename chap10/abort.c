@@ -1,4 +1,4 @@
-﻿#include"MyAPUE.h"
+﻿#include "MyAPUE.h"
 
 static void abort_sig(int sig) {
 	if (sig == SIGABRT)

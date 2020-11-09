@@ -1,5 +1,5 @@
-﻿#include"apue.h"
-#include<sys/wait.h>
+﻿#include "apue.h"
+#include <sys/wait.h>
 
 static void sig_cld(int sig) {
 	pid_t pid;

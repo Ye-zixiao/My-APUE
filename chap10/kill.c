@@ -1,6 +1,6 @@
-﻿#include"MyAPUE.h"
-#include<time.h>
-#include<sys/time.h>
+﻿#include "MyAPUE.h"
+#include <time.h>
+#include <sys/time.h>
 
 static void isChildExisted(pid_t pid) {
 	struct timeval timebuf;

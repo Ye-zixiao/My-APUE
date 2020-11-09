@@ -1,8 +1,8 @@
-﻿#include"MyAPUE.h"
-#include<signal.h>
-#include<setjmp.h>
-#include<time.h>
-#include<sys/time.h>
+﻿#include "MyAPUE.h"
+#include <signal.h>
+#include <setjmp.h>
+#include <time.h>
+#include <sys/time.h>
 
 typedef void Sig_handler(int);
 static jmp_buf env_buf;

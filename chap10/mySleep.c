@@ -1,7 +1,7 @@
-﻿#include"MyAPUE.h"
-#include<signal.h>
-#include<time.h>
-#include<sys/time.h>
+﻿#include "MyAPUE.h"
+#include <signal.h>
+#include <time.h>
+#include <sys/time.h>
 
 #define BufSize 64
 
