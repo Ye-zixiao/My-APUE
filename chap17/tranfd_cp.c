@@ -1,3 +1,7 @@
+/**
+ * 该程序用来验证子进程打开文件后向父进程传送文件
+ * 描述符的结果就是父子进程同时共享一个文件打开表项
+ */
 #include "../include/MyAPUE.h"
 #include <fcntl.h>
 #include <sys/socket.h>

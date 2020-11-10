@@ -40,8 +40,9 @@ int main(int argc, char* argv[])
 	while ((ch = getopt(argc, argv, "hairl")) != -1) {
 		switch (ch) {
 		case 'h':
-			err_quit("usage: myls [-l] [-r] [dirname]\n"
+			err_quit("usage: myls [-a] [-i] [-l] [-r] [dirname]\n"
 					"       myls [-h]\n"
+					"i: inode\n"
 				    "a: list all\n"
 					"h: for help\n"
 					"l: for detail information\n"
